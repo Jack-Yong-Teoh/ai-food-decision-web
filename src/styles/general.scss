@@ -1,0 +1,31 @@
+@use "sass:math";
+
+@function to-rem($px, $base-font-size: 16px) {
+    @return math.div($px, $base-font-size) * 1rem;
+  }
+  
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  
+  // text size adjust
+  html {
+    -webkit-text-size-adjust: 100%; /* for Safari and Chrome */
+    -moz-text-size-adjust: 100%; /* for Firefox */
+    -ms-text-size-adjust: 100%; /* for Internet Explorer */
+    text-size-adjust: 100%; /* for general */
+  }
+  
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    // font-family: "Roboto", sans-serif;
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+  }
