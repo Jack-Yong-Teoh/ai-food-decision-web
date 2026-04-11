@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Food Decision Web
 
-## Getting Started
+Next.js web application for AI-powered food decision making.
 
-First, run the development server:
+## 1. Prerequisites
+
+Make sure you have these tools installed on your machine:
+
+- Node.js `v23.2.0`
+- Yarn Classic `v1.22.22`
+
+> Current verified local setup:
+>
+> - `node --version` -> `v23.2.0`
+> - `yarn --version` -> `1.22.22`
+
+## 2. Install Node.js (macOS)
+
+Install Node.js using the official installer or Homebrew. Do not use `nvm`.
+
+Option A — Official Node.js installer (recommended for exact version):
+
+1. Open https://nodejs.org/en/download/ and download the macOS installer for **v23.2.0** (or the closest matching version).
+2. Run the installer and follow the prompts.
+
+Verify:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node --version
 ```
 
-Open [http://localhost:3888](http://localhost:3888) with your browser to see the result.
+Expected output:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+v23.2.0
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Option B — Homebrew (if you prefer Homebrew-managed packages):
 
-## Learn More
+```bash
+brew install node
+```
 
-To learn more about Next.js, take a look at the following resources:
+Note: Homebrew may install a different Node.js version. If you must match `v23.2.0` exactly, use the official installer.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 3. Install Yarn Classic (v1) using npm
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Install Yarn globally with `npm`, then use Yarn for all project commands.
 
-## Deploy on Vercel
+```bash
+npm install -g yarn@1.22.22
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Verify:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+yarn --version
+```
+
+Expected output:
+
+```bash
+1.22.22
+```
+
+## 4. Clone and open the project
+
+```bash
+git clone <your-repo-url>
+cd ai-food-decision-web
+```
+
+## 5. Install dependencies
+
+```bash
+yarn install
+```
+
+## 6. Start development server
+
+```bash
+yarn dev
+```
+
+You should see the app running at:
+
+- [http://localhost:3888](http://localhost:3888)
+
+Open that URL in your browser to view the app.
+
+## 7. Common commands (Yarn only)
+
+```bash
+yarn dev      # Start local development server
+yarn build    # Build for production
+yarn start    # Run production build
+yarn lint --fix     # Run linter
+```
+
+## Troubleshooting
+
+1. Wrong Node version:
+
+```bash
+nvm use 23.2.0
+node --version
+```
+
+2. Yarn command not found:
+
+```bash
+npm install -g yarn@1.22.22
+yarn --version
+```
+
+3. Dependency issues after switching Node version:
+
+```bash
+rm -rf node_modules yarn.lock
+yarn install
+```
