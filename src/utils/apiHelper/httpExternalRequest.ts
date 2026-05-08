@@ -109,9 +109,9 @@ export async function httpExternalRequest({
     }
   }
 
-  // 3.3 Condition 3: Guarantee the logout is always success and redirect to "/login"
+  // 3.3 Condition 3: Guarantee the logout is always success and redirect to home page"
   if (endpoint.includes("logout")) {
-    const response = redirectToLogin();
+    const response = NextResponse.json({ status: 200, redirectTo: "/" });
     // Clear all the token cookies
     deleteAllToken();
     return response;

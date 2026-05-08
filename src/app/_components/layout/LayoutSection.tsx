@@ -34,6 +34,7 @@ import {
 import { setProfile } from "@/redux/slices/profileSlice";
 import { getUserProfile } from "@/services/api/user";
 import { getWallet } from "@/services/api/wallet";
+import { handleApiError } from "@/utils/apiHelper/errorHandler";
 
 import LayoutFooter from "./Footer";
 import SignUpModal from "./SignUpModal";
@@ -74,6 +75,7 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
 
   const [selectedKey, setSelectedKey] = useState<string>(currentKey);
   const [wallet, setWallet] = useState<any>(null);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
   const loginModalOpen = useAppSelector((state) => state.modal.loginModalOpen);
   const signUpModalOpen = useAppSelector(
     (state) => state.modal.signUpModalOpen,
@@ -151,6 +153,17 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogin]);
 
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const toggleCollapse = () => {
     dispatch(setCollapsed(!collapsed));
   };
@@ -160,7 +173,7 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
     if (item?.disabled) {
       message.open({
         type: "warning",
-        content: "Authentication required. Please log in to access this page.",
+        content: "Please log in to access this page.",
         key: "auth-required",
         duration: 2,
       });
@@ -191,11 +204,7 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
       dispatch(setProfile(data));
     } catch (error) {
       if (error instanceof AxiosError) {
-        message.error(
-          error?.response?.data?.message || "Error fetching profile.",
-        );
-      } else {
-        message.error("Error fetching profile.");
+        handleApiError(error, "Error fetching profile.");
       }
     }
   };
@@ -206,11 +215,7 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
       setWallet(data);
     } catch (error) {
       if (error instanceof AxiosError) {
-        message.error(
-          error?.response?.data?.message || "Error fetching wallet.",
-        );
-      } else {
-        message.error("Error fetching wallet.");
+        handleApiError(error, "Error fetching wallet.");
       }
     }
   };
@@ -247,6 +252,7 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
                     />
                   }
                   className={`layout__section__header__middle__container__button__container__wallet__button`}
+                  onClick={() => router.push("/payment")}
                 >
                   {wallet?.balance.toFixed(2) ?? "-"}
                 </Button>
@@ -276,17 +282,6 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
                 >
                   {"Sign Up"}
                 </Button>
-
-                <Dropdown
-                  menu={{ items: userDropdownItems }}
-                  trigger={["click"]}
-                >
-                  <Image
-                    src={IMAGES.user_icon}
-                    preview={false}
-                    className={`layout__section__header__middle__container__button__container__avatar`}
-                  />
-                </Dropdown>
               </>
             )}
           </div>
@@ -297,7 +292,7 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
         <Sider
           width={210}
           collapsed={collapsed}
-          collapsedWidth={80}
+          collapsedWidth={screenWidth > 430 ? 80 : 0}
           className={`layout__section__sider`}
         >
           <Menu
@@ -327,36 +322,10 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
               <div className={`layout__section__content__container `}>
                 <div>{children}</div>
               </div>
-
-              <LayoutFooter showFooter={showFooter} />
             </>
           )}
+          <LayoutFooter showFooter={showFooter} />
         </Layout>
-
-        <div className="layout__section__footer">
-          <div className="layout__section__menu__bar">
-            {menuItems.map(({ key, icon, label, disabled }) => {
-              const isSelected = selectedKey === key;
-
-              return (
-                <div
-                  key={key}
-                  onClick={() => handleMenu(key)}
-                  className={`layout__section__menu__bar__item${
-                    isSelected ? " selected" : ""
-                  }${disabled ? " disabled" : ""}`}
-                >
-                  <div className="layout__section__menu__bar__item__icon">
-                    {icon}
-                  </div>
-                  <div className="layout__section__menu__bar__item__label">
-                    {label}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
       </Layout>
 
       <LoginModal

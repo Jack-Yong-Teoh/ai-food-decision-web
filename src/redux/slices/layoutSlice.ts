@@ -6,7 +6,7 @@ interface LayoutState {
 }
 
 const initialState: LayoutState = {
-  collapsed: false,
+  collapsed: true,
   logoutProgress: false,
 };
 

@@ -5,7 +5,8 @@ import { AxiosError } from "axios";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppDispatch } from "@/redux/hook";
 import { openLoginModal } from "@/redux/slices/modalSlice";
-import { signUp } from "@/services/api/auth";
+import { logIn,signUp } from "@/services/api/auth";
+import { handleApiError } from "@/utils/apiHelper/errorHandler";
 import useValidator from "@/utils/validator";
 
 import Modal from "../modal/Modal";
@@ -26,13 +27,16 @@ const SignUpModal = ({ open, onClose }: CustomModalProps) => {
   const handleSignUp = () => {
     setLoading(true);
     form.validateFields().then(async (values) => {
-      const formData = new FormData();
-      formData.append("username", values.username);
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-      formData.append("password", values.password);
+      const params = {
+        username: values.username,
+        first_name: values.first_name,
+        last_name: values.last_name,
+        email: values.email,
+        password: values.password,
+      };
       try {
-        await signUp(formData);
+        await signUp(params);
+        await logIn({ username: params.username, password: params.password });
         message.success("Sign up successful!");
         setIsLogin(true);
         setLoading(false);
@@ -43,12 +47,7 @@ const SignUpModal = ({ open, onClose }: CustomModalProps) => {
         }, 500);
       } catch (error) {
         if (error instanceof AxiosError) {
-          message.error(
-            error?.response?.data?.message ||
-              "Sign up failed. Please try again.",
-          );
-        } else {
-          message.error("Sign up failed. Please try again.");
+          handleApiError(error, "Failed to sign up");
         }
         setLoading(false);
       }
@@ -66,26 +65,41 @@ const SignUpModal = ({ open, onClose }: CustomModalProps) => {
         <div className={`signup__modal__container__title`}>{"Sign Up"}</div>
 
         <Form onFinish={handleSignUp} form={form} labelCol={{ span: 24 }}>
+          <Form.Item
+            name="username"
+            label={"Username"}
+            className={`signup__modal__input`}
+            rules={[validator.required, validator.username]}
+          >
+            <Input
+              autoComplete="username"
+              placeholder={"Enter your username"}
+            />
+          </Form.Item>
+
           <Flex gap={10}>
             <Form.Item
-              name="username"
-              label={"Username"}
+              name="first_name"
+              label={"First Name"}
               className={`signup__modal__input`}
-              rules={[validator.required, validator.username]}
+              rules={[validator.required]}
             >
               <Input
-                autoComplete="username"
-                placeholder={"Enter your username"}
+                autoComplete="first_name"
+                placeholder={"Enter your first name"}
               />
             </Form.Item>
 
             <Form.Item
-              name="name"
-              label={"Name"}
+              name="last_name"
+              label={"Last Name"}
               className={`signup__modal__input`}
               rules={[validator.required]}
             >
-              <Input autoComplete="name" placeholder={"Enter your name"} />
+              <Input
+                autoComplete="last_name"
+                placeholder={"Enter your last name"}
+              />
             </Form.Item>
           </Flex>
 

@@ -773,3 +773,10 @@ ul.ant-picker-ranges button {
 .ant-switch-checked {
   background: $primary !important;
 }
+
+//ant skeleton
+.ant-skeleton-title,
+.ant-skeleton-button,
+.ant-skeleton-paragraph > li {
+  background-color: rgba(140, 140, 140, 0.15) !important;
+}

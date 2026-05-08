@@ -1,7 +1,7 @@
 import { sprintf } from "sprintf-js";
 
 import { ENDPOINT } from "../api-endpoints";
-import http, { httpSubmitForm } from "../http";
+import http from "../http";
 
 export const getUser = async (user_id: number) => {
   const res = await http.get(sprintf(ENDPOINT.getUser, user_id));
@@ -14,10 +14,6 @@ export const getUserProfile = async () => {
 };
 
 export const updateUserProfile = async (data: any) => {
-  const res = await httpSubmitForm({
-    endpoint: ENDPOINT.updateUserProfile,
-    formData: data,
-    method: "patch",
-  });
+  const res = await http.put(ENDPOINT.updateUserProfile, data);
   return res?.data;
 };

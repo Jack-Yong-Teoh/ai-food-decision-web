@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppDispatch } from "@/redux/hook";
 import { openSignUpModal } from "@/redux/slices/modalSlice";
 import { logIn } from "@/services/api/auth";
+import { handleApiError } from "@/utils/apiHelper/errorHandler";
 import useValidator from "@/utils/validator";
 
 import Modal from "../modal/Modal";
@@ -43,11 +44,7 @@ const LoginModal = ({ open, onClose }: CustomModalProps) => {
         }, 500);
       } catch (error) {
         if (error instanceof AxiosError) {
-          message.error(
-            error?.response?.data?.message || "Login failed. Please try again.",
-          );
-        } else {
-          message.error("Login failed. Please try again.");
+          handleApiError(error, "Failed to log in, Please try again");
         }
         setLoading(false);
       }

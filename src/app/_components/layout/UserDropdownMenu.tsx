@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppDispatch } from "@/redux/hook";
 import { setLogoutProgress } from "@/redux/slices/layoutSlice";
 import { logOut } from "@/services/api/auth";
+import { handleApiError } from "@/utils/apiHelper/errorHandler";
 
 interface GetUserDropdownItemsProps {
   isLoggedIn: boolean;
@@ -32,9 +33,7 @@ export const GetUserDropdownItems = ({
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-        message.error(error?.response?.data?.message || "Failed to log out.");
-      } else {
-        message.error("Failed to log out.");
+        handleApiError(error, "Failed to log out");
       }
       dispatch(setLogoutProgress(false));
     }

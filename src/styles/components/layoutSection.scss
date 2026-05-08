@@ -37,7 +37,9 @@
       }
 
       @media (max-width: 430px) {
-        display: none !important;
+        margin-left: to-rem(0px);
+        font-size: to-rem(18px) !important;
+        width: to-rem(40px) !important;
       }
     }
 
@@ -165,10 +167,6 @@
     background-color: $secondary !important;
     box-shadow: 6px 0 16px -4px rgba(0, 0, 0, 0.08);
 
-    @media (max-width: 430px) {
-      display: none !important;
-    }
-
     &__system__logo__container {
       display: flex;
       background: $secondary !important;
@@ -245,7 +243,7 @@
 
     @media (max-width: 430px) {
       margin-left: to-rem(0px) !important;
-      margin-bottom: to-rem(50px) !important;
+      // margin-bottom: to-rem(50px) !important;
     }
 
     &.no__padding {
@@ -273,164 +271,6 @@
 
       @media (max-width: 430px) {
         padding: to-rem(10px) to-rem(5px);
-      }
-    }
-
-    &__footer {
-      flex: 0 0 auto;
-      width: 100%;
-      min-height: to-rem(120px);
-      padding: to-rem(10px) to-rem(15px) to-rem(30px) to-rem(15px);
-      background: $footer !important;
-
-      @media (max-width: 430px) {
-        padding: to-rem(10px) to-rem(10px) to-rem(20px) to-rem(10px);
-      }
-
-      &.hidden {
-        display: none !important;
-      }
-
-      .section-two {
-        display: block;
-        max-height: to-rem(2000px);
-        overflow: hidden;
-        opacity: 1;
-        transition:
-          max-height 0.8s ease-in-out,
-          opacity 0.8s ease-in-out,
-          margin 0.8s ease-in-out;
-
-        &.collapsed {
-          max-height: 0;
-          opacity: 0;
-          margin: 0;
-          transition:
-            max-height 0.3s ease-in-out,
-            opacity 0.3s ease-in-out,
-            margin 0.3s ease-in-out;
-        }
-      }
-
-      &__slick {
-        width: 100%;
-        margin: 0 auto;
-        max-width: to-rem(1300px);
-      }
-
-      &__upper__container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: to-rem(10px);
-
-        &__title {
-          font-size: to-rem(12px) !important;
-          font-weight: 300 !important;
-          color: $primary !important;
-          margin-bottom: to-rem(10px);
-
-          @media (max-width: 430px) {
-            font-size: to-rem(10px) !important;
-          }
-        }
-
-        &__item__container {
-          display: flex;
-          align-items: center;
-          gap: to-rem(10px);
-        }
-
-        &__atag {
-          pointer-events: auto;
-          cursor: pointer;
-
-          &.no__url {
-            cursor: default;
-          }
-        }
-
-        &__item {
-          width: to-rem(20px);
-          height: to-rem(20px);
-
-          @media (max-width: 430px) {
-            width: to-rem(16px);
-            height: to-rem(16px);
-          }
-        }
-      }
-
-      &__seperator {
-        width: 100%;
-        height: to-rem(1px);
-        margin: to-rem(15px) 0;
-        background: $secondary_3 !important;
-
-        @media (max-width: 430px) {
-          margin: to-rem(10px) 0;
-        }
-      }
-
-      &__h1__title {
-        font-size: to-rem(20px) !important;
-        font-weight: 500 !important;
-        color: $primary !important;
-
-        @media (max-width: 430px) {
-          font-size: to-rem(16px) !important;
-        }
-      }
-
-      &__h2__title {
-        font-size: to-rem(18px) !important;
-        font-weight: 500 !important;
-        color: $primary !important;
-
-        @media (max-width: 430px) {
-          font-size: to-rem(14px) !important;
-        }
-      }
-
-      &__h3__title {
-        font-size: to-rem(15px) !important;
-        font-weight: 500 !important;
-        color: $primary !important;
-
-        @media (max-width: 430px) {
-          font-size: to-rem(12px) !important;
-        }
-      }
-
-      &__text {
-        margin-left: to-rem(4px);
-        font-size: to-rem(12px) !important;
-        font-weight: 300;
-        text-align: justify;
-        color: $gray !important;
-
-        @media (max-width: 430px) {
-          margin-left: to-rem(2px);
-          font-size: to-rem(10px) !important;
-        }
-      }
-
-      &__read__more {
-        width: fit-content;
-        margin-left: to-rem(4px);
-        font-size: to-rem(12px) !important;
-        color: $gray !important;
-        cursor: pointer;
-
-        @media (max-width: 430px) {
-          margin-left: to-rem(2px);
-          font-size: to-rem(10px) !important;
-        }
-
-        &:hover {
-          color: $primary !important;
-          text-decoration: underline;
-        }
       }
     }
   }

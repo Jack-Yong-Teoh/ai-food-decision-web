@@ -4,11 +4,12 @@ export const ENDPOINT = {
   logout: `/authentication/logout`,
   refresh: `/authentication/token/refresh`,
   changePassword: `/authentication/password/change`,
+  signUp: `/authentication/signup`,
 
   //user
   getUser: `/user?user_id=%s`,
   getUserProfile: `/user/profile/`,
-  updateUserProfile: `/user/profile/update/`,
+  updateUserProfile: `/user/profile/`,
 
   //wallet
   getWallet: `/wallet?wallet_id=%d`,
