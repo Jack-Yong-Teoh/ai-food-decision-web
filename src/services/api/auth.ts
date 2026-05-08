@@ -11,3 +11,8 @@ export const logIn = async (params: any) => {
 export const logOut = async () => {
   return await http.post(sprintf(ENDPOINT.logout));
 };
+
+export const signUp = async (params: any) => {
+  const res = await http.post(ENDPOINT.login, params);
+  return res?.data;
+};

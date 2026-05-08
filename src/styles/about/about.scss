@@ -1,9 +1,0 @@
-@use "../general.scss" as *;
-@use "../color.scss" as *;
-
-.about {
-    &__title {
-        font-size: to-rem(32px);
-        color: $primary;
-    }
-}

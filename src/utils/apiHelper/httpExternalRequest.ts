@@ -62,6 +62,12 @@ export async function httpExternalRequest({
   const bodyText = data ? JSON.stringify(data) : undefined;
   const responseHeaders = new Headers(response.headers);
 
+  // Remove content-length/transfer-encoding headers from upstream
+  // to avoid mismatches when we re-create the response body here.
+  responseHeaders.delete("content-length");
+  responseHeaders.delete("Content-Length");
+  responseHeaders.delete("transfer-encoding");
+
   //  3.1 Condition 1: Login endpoint will set the tokens into cookies
   if (response.ok && endpoint.includes("login")) {
     setAllToken(data);
@@ -146,7 +152,11 @@ export async function refreshTokenRequest(httpMethod: HttpMethod) {
   const data = await response.json();
   const bodyText = JSON.stringify(data);
   const headers = new Headers(response.headers);
-
+  // Remove content-length/transfer-encoding headers from upstream
+  // to avoid mismatches when recreating the response body here.
+  headers.delete("content-length");
+  headers.delete("Content-Length");
+  headers.delete("transfer-encoding");
   setAllToken(data);
   const res = new NextResponse(bodyText, {
     status: response.status,
@@ -159,8 +169,8 @@ export async function refreshTokenRequest(httpMethod: HttpMethod) {
 
 function redirectToLogin() {
   return NextResponse.json(
-    { message: "Unauthorized", redirectTo: "/login" },
-    { status: 307 }
+    { message: "Unauthorized", redirectTo: "/recommend" },
+    { status: 307 },
   );
 }
 
