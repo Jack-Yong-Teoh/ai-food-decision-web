@@ -1,0 +1,78 @@
+@use "../color.scss" as *;
+@use "../general.scss" as *;
+
+.not__found {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $background !important;
+  color: $text-color;
+  padding: 0 to-rem(10px) !important;
+
+  &__container {
+    background-color: $secondary-1 !important;
+    padding: to-rem(10px) to-rem(40px);
+    border-radius: to-rem(12px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+
+    @media (max-width: 430px) {
+      padding: to-rem(0px) !important;
+    }
+
+    &__result {
+      .ant-result-title {
+        color: $text-color !important;
+        font-size: to-rem(64px);
+        font-weight: 700;
+      }
+
+      .ant-result-subtitle {
+        color: $secondary-text-color !important;
+        font-size: to-rem(16px);
+        margin-top: to-rem(8px);
+        margin-bottom: to-rem(20px);
+      }
+    }
+
+    &__button {
+      background-color: $primary !important;
+      border-color: $primary !important;
+      color: $white !important;
+      font-size: to-rem(16px);
+      font-weight: 500;
+      padding: to-rem(8px) to-rem(16px);
+
+      &:hover {
+        background-color: $secondary-4 !important;
+        border-color: $secondary-4 !important;
+      }
+    }
+  }
+
+  @media (max-width: 430px) {
+    padding: to-rem(20px);
+
+    &__container {
+      padding: to-rem(20px);
+      width: 100%;
+
+      &__result {
+        .ant-result-title {
+          font-size: to-rem(48px);
+        }
+
+        .ant-result-subtitle {
+          font-size: to-rem(14px);
+        }
+      }
+
+      &__button {
+        width: 100% !important;
+        font-size: to-rem(14px);
+        height: to-rem(40px);
+      }
+    }
+  }
+}
