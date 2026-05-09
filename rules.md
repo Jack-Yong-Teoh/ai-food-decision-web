@@ -16,3 +16,4 @@ Rules to follow during development:
 14. Always use the useAppSelector and useAppDispatch hooks to interact with the Redux store
 15. Always use the useEffect hook to manage side effects, do not use it for data fetching, use a separate function for data fetching and call it inside the useEffect hook.
 16. After completing the task, open a pull request into develop branch and request for code review, do not merge the code yourself, wait for the approval from the team (format the pull request title and description appropriately, the branch name should be in the format (feature/ticket-number, e.g feature/FSD-12)).
+17. after running yarn lint --fix, yarn build should run without any errors, if there are any errors, fix them before committing.

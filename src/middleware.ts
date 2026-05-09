@@ -9,16 +9,11 @@ const protectedRoutes = [
   "/user-management",
   "/lucky-pick-management",
 ];
-const publicRoutes = ["/", "/lucky-pick", "/recommend"];
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
-  const accessToken = (await cookies()).get("accessToken")?.value;
-
-  if (publicRoutes.includes(path) && accessToken) {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
+  const accessToken = (await cookies()).get("ACCESS_TOKEN")?.value;
 
   if (protectedRoutes.some((route) => path.startsWith(route)) && !accessToken) {
     return NextResponse.redirect(new URL("/", req.url), 303);

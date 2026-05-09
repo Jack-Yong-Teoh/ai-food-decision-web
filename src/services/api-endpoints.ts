@@ -7,7 +7,11 @@ export const ENDPOINT = {
   signUp: `/authentication/signup`,
 
   //user
+  getUsers: `/users`,
   getUser: `/user?user_id=%s`,
+  createUser: `/user`,
+  updateUser: `/user/%s`,
+  deleteUser: `/user/%s`,
   getUserProfile: `/user/profile/`,
   updateUserProfile: `/user/profile/`,
 

@@ -48,36 +48,40 @@ body {
   background-color: $background !important;
 }
 
-.primary__button {
-  background-color: $primary !important;
-  color: $white !important;
-  border: none !important;
-  border-radius: to-rem(5px) !important;
-  box-shadow: 0 to-rem(1px) to-rem(4px) rgba(0, 0, 0, 0.1) !important;
-
-  &:hover {
-    background-color: $secondary-4 !important;
-  }
-
-  &.danger {
-    background-color: $danger !important;
+.primary {
+  &__button {
+    background-color: $primary !important;
+    color: $white !important;
+    border: none !important;
+    border-radius: to-rem(5px) !important;
+    box-shadow: 0 to-rem(1px) to-rem(4px) rgba(0, 0, 0, 0.1) !important;
 
     &:hover {
+      background-color: $secondary-4 !important;
+    }
+
+    &.danger {
       background-color: $danger !important;
-      filter: brightness(0.8);
+
+      &:hover {
+        background-color: $danger !important;
+        filter: brightness(0.8);
+      }
     }
   }
 }
 
-.secondary__button {
-  background-color: $secondary-2 !important;
-  color: $text-color !important;
-  border: none !important;
-  border-radius: to-rem(5px) !important;
-  box-shadow: 0 to-rem(1px) to-rem(4px) rgba(0, 0, 0, 0.1) !important;
+.secondary {
+  &__button {
+    background-color: $secondary-2 !important;
+    color: $text-color !important;
+    border: none !important;
+    border-radius: to-rem(5px) !important;
+    box-shadow: 0 to-rem(1px) to-rem(4px) rgba(0, 0, 0, 0.1) !important;
 
-  &:hover {
-    background-color: $secondary-3 !important;
+    &:hover {
+      background-color: $secondary-3 !important;
+    }
   }
 }
 
@@ -341,9 +345,14 @@ body {
   .ant-popover-arrow::before,
   .ant-popover-arrow::after {
     background-color: $secondary-2 !important;
+    box-shadow: 0 to-rem(1px) to-rem(4px) rgba(0, 0, 0, 0.5) !important;
   }
 
   .ant-popconfirm-title {
+    color: $text-color !important;
+  }
+
+  .ant-popconfirm-description {
     color: $text-color !important;
   }
 
@@ -779,4 +788,26 @@ ul.ant-picker-ranges button {
 .ant-skeleton-button,
 .ant-skeleton-paragraph > li {
   background-color: rgba(140, 140, 140, 0.15) !important;
+}
+
+// button alignments:
+.save__buttons__area {
+  &__flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__flex__right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: to-rem(10px);
+  }
+
+  &__flex__left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
 }

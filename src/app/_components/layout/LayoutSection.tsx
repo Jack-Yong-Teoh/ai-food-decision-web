@@ -132,13 +132,13 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
         key: "user-management",
         icon: <TeamOutlined />,
         label: createMenuLabel("/user-management", "Manage User"),
-        disabled: !isAdmin,
+        disabled: !isAdmin && !isLogin,
       },
       isAdmin && {
         key: "lucky-pick-management",
         icon: <PlusCircleOutlined />,
         label: createMenuLabel("/lucky-pick-management", "Manage Lucky Pick"),
-        disabled: !isAdmin,
+        disabled: !isAdmin && !isLogin,
       },
     ];
 
