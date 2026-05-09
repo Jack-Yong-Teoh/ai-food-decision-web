@@ -3,11 +3,18 @@ export const ENDPOINT = {
   login: `/authentication/login`,
   logout: `/authentication/logout`,
   refresh: `/authentication/token/refresh`,
+  changePassword: `/authentication/password/change`,
+  signUp: `/authentication/signup`,
 
-  // //user with example of query params and path params
-  // getUser: `/user?user_id=%s`,
-  // updateUser: `/user/%s`,
+  //user
+  getUsers: `/users`,
+  getUser: `/user?user_id=%s`,
+  createUser: `/user`,
+  updateUser: `/user/%s`,
+  deleteUser: `/user/%s`,
+  getUserProfile: `/user/profile/`,
+  updateUserProfile: `/user/profile/`,
 
-  // // daily Summary [form-data]
-  // validateDailySummary: `/daily-summary/validate/csv`,
+  //wallet
+  getWallet: `/wallet?wallet_id=%d`,
 };

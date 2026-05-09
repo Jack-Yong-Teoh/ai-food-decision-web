@@ -1,0 +1,462 @@
+@use "../color.scss" as *;
+@use "../general.scss" as *;
+
+.layout__section {
+  min-height: 100vh !important;
+  background-color: $secondary_1 !important;
+
+  &__header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: to-rem(64px);
+    display: flex;
+    align-items: center;
+    color: $text_color;
+    padding: to-rem(10px) !important;
+    background: $secondary !important;
+    box-shadow: 0 to-rem(1px) to-rem(4px) rgba(0, 0, 0, 0.1) !important;
+    z-index: 1000;
+
+    &__button {
+      margin-right: to-rem(150px);
+      margin-left: to-rem(8px);
+      font-size: to-rem(20px) !important;
+      width: to-rem(50px) !important;
+      height: to-rem(50px) !important;
+      color: $text_color !important;
+      background-color: $secondary !important;
+
+      &.collapsed {
+        margin-right: to-rem(0px);
+      }
+
+      @media (max-width: 768px) {
+        margin-right: to-rem(0px);
+      }
+
+      @media (max-width: 430px) {
+        margin-left: to-rem(0px);
+        font-size: to-rem(18px) !important;
+        width: to-rem(40px) !important;
+      }
+    }
+
+    &__middle__container {
+      width: 100%;
+      // max-width: to-rem(1300px);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      &__button__container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 to-rem(10px);
+
+        @media (max-width: 430px) {
+          padding: 0;
+        }
+
+        &__login__button {
+          overflow: hidden;
+          min-width: to-rem(80px);
+          max-width: to-rem(120px);
+          margin-right: to-rem(10px);
+
+          @media (max-width: 430px) {
+            width: to-rem(60px);
+            height: to-rem(25px) !important;
+            font-size: to-rem(10px) !important;
+          }
+        }
+
+        &__sign__up__button {
+          overflow: hidden;
+          min-width: to-rem(80px);
+          max-width: to-rem(120px);
+
+          @media (max-width: 430px) {
+            width: to-rem(60px);
+            height: to-rem(25px) !important;
+            font-size: to-rem(10px) !important;
+          }
+        }
+
+        &__more__outlined {
+          margin-left: to-rem(10px);
+          color: $text_color !important;
+          font-size: to-rem(20px) !important;
+          cursor: pointer;
+        }
+
+        &__wallet__button {
+          border: to-rem(1px) solid $secondary_3 !important;
+          background-color: $secondary_2 !important;
+          color: $white !important;
+          min-width: to-rem(80px) !important;
+
+          &__icon {
+            color: $secondary_4 !important;
+          }
+        }
+
+        &__avatar {
+          margin-left: to-rem(12px);
+          width: to-rem(40px) !important;
+          height: to-rem(40px) !important;
+          border-radius: 50%;
+          background-color: $secondary_1 !important;
+          object-fit: cover !important;
+          cursor: pointer;
+
+          &.loggedIn {
+            border: to-rem(1.5px) solid $secondary_2 !important;
+          }
+
+          @media (max-width: 430px) {
+            width: to-rem(35px) !important;
+            height: to-rem(35px) !important;
+          }
+        }
+      }
+    }
+
+    &__logo {
+      width: 100%;
+      max-width: to-rem(160px);
+      height: auto;
+      max-height: to-rem(50px);
+      padding: 0 to-rem(15px);
+      vertical-align: middle;
+      cursor: pointer;
+
+      @media (max-width: 430px) {
+        padding: 0 to-rem(5px);
+        max-width: to-rem(120px);
+      }
+    }
+
+    &__right__container {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 to-rem(10px);
+      margin-left: auto;
+
+      &__icon {
+        font-size: to-rem(20px) !important;
+        color: $text_color !important;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__layout {
+    margin-top: to-rem(64px) !important;
+    background-color: $secondary !important;
+  }
+
+  &__sider {
+    position: fixed !important;
+    height: calc(100vh - 64px) !important;
+    overflow-y: auto;
+    z-index: 3;
+    background-color: $secondary !important;
+    box-shadow: 6px 0 16px -4px rgba(0, 0, 0, 0.08);
+
+    &__system__logo__container {
+      display: flex;
+      background: $secondary !important;
+      justify-content: center !important;
+      padding: to-rem(10px);
+      width: 100%;
+      position: absolute !important;
+      z-index: 9999 !important;
+      bottom: 0 !important;
+    }
+
+    &__menu {
+      height: 100%;
+      border-right: 0 !important;
+      background: $secondary !important;
+      padding: to-rem(5px) !important;
+      overflow-y: auto;
+
+      .ant-menu-item {
+        color: $text_color !important;
+
+        .ant-menu-item-icon {
+          font-size: 16px !important;
+          color: $text_color !important;
+        }
+
+        &:hover {
+          background-color: $secondary_2 !important;
+        }
+      }
+
+      .ant-menu-item-selected {
+        background-color: $secondary_3 !important;
+
+        &,
+        &:hover,
+        &:active,
+        &:focus {
+          background-color: $secondary_3 !important;
+        }
+
+        .ant-menu-item-icon {
+          transform: scale(1.25) !important;
+          color: $text_color !important;
+        }
+
+        .ant-menu-title-content {
+          color: $text_color !important;
+        }
+      }
+
+      .ant-menu-item-disabled {
+        .ant-menu-title-content {
+          color: $disabled !important;
+        }
+
+        .ant-menu-item-icon {
+          color: $disabled !important;
+        }
+
+        &:hover {
+          background-color: transparent !important;
+        }
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    background: $black !important;
+    margin-left: to-rem(210px);
+    min-height: 100vh;
+
+    @media (max-width: 430px) {
+      margin-left: to-rem(0px) !important;
+      // margin-bottom: to-rem(50px) !important;
+    }
+
+    &.no__padding {
+      padding: 0 !important;
+    }
+
+    &.collapsed {
+      margin-left: to-rem(80px);
+    }
+
+    &__heading {
+      font-size: to-rem(20px) !important;
+      margin: 0 0 to-rem(20px) to-rem(5px) !important;
+      font-weight: 500 !important;
+      color: $black !important;
+    }
+
+    &__container {
+      flex: 1;
+      padding: to-rem(20px) to-rem(15px);
+      border-radius: to-rem(10px);
+      width: 100%;
+      max-width: to-rem(1300px);
+      margin: 0 auto;
+
+      @media (max-width: 430px) {
+        padding: to-rem(10px) to-rem(5px);
+      }
+    }
+  }
+
+  &__footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: to-rem(50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text_color !important;
+    background: $secondary !important;
+    box-shadow: 0 to-rem(-2px) to-rem(10px) rgba(0, 0, 0, 0.2) !important;
+    z-index: 999;
+
+    @media (min-width: 431px) {
+      display: none !important;
+    }
+  }
+
+  &__menu__bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+
+    &__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: inherit;
+
+      &.selected {
+        color: $primary !important;
+      }
+
+      &__anchor {
+        text-decoration: none !important;
+        color: inherit !important;
+      }
+
+      &__icon {
+        cursor: pointer;
+
+        .anticon {
+          font-size: to-rem(18px) !important;
+          color: $text_color !important;
+        }
+
+        .selected & {
+          color: $primary !important;
+
+          .anticon {
+            color: $primary !important;
+          }
+        }
+
+        .disabled & {
+          color: $disabled !important;
+          cursor: not-allowed;
+
+          .anticon {
+            color: $disabled !important;
+          }
+        }
+      }
+
+      &__label {
+        font-size: to-rem(10px);
+        margin-top: to-rem(4px);
+        color: inherit;
+        cursor: pointer;
+
+        .selected & {
+          color: $primary !important;
+        }
+
+        .disabled & {
+          color: $disabled !important;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  &__language__label {
+    display: flex;
+    align-items: center;
+    gap: to-rem(8px);
+  }
+
+  &__language__icon {
+    width: to-rem(16px) !important;
+    height: to-rem(16px) !important;
+    display: block !important;
+  }
+
+  &__notification {
+    margin-bottom: to-rem(0px) !important;
+  }
+}
+
+.custom__mask {
+  @media (max-width: 430px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    display: none;
+
+    &.visible {
+      display: block;
+    }
+  }
+}
+
+.logout__mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99999;
+  display: none;
+
+  &.visible {
+    display: block;
+  }
+}
+
+.ant-dropdown .ant-dropdown-menu {
+  position: relative !important;
+  background-color: $secondary !important;
+  margin-top: to-rem(-4px) !important;
+  // border-radius: 0 !important;
+
+  .ant-dropdown-menu-item:hover {
+    background-color: $secondary_2 !important;
+  }
+
+  .ant-dropdown-menu-submenu-title {
+    color: $text_color !important;
+
+    &:hover {
+      background-color: $secondary_2 !important;
+    }
+
+    .ant-dropdown-menu-submenu-expand-icon
+      .ant-dropdown-menu-submenu-arrow-icon {
+      color: $text_color !important;
+    }
+  }
+
+  .ant-dropdown-menu-item {
+    color: $text_color !important;
+  }
+}
+
+.ant-dropdown-menu-submenu .ant-dropdown-menu {
+  background-color: $secondary !important;
+  // border-radius: 0 !important;
+  margin-right: to-rem(5px) !important;
+
+  .ant-dropdown-menu-item {
+    color: $text_color !important;
+
+    &:hover {
+      background-color: $secondary_2 !important;
+    }
+
+    &.selected-sub-item {
+      background-color: $secondary_3 !important;
+
+      &,
+      &:hover,
+      &:active,
+      &:focus {
+        background-color: $secondary_3 !important;
+      }
+    }
+  }
+}

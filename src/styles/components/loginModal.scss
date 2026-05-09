@@ -1,0 +1,54 @@
+@use "../color.scss" as *;
+@use "../general.scss" as *;
+
+.login__modal {
+  &__container {
+    margin-top: to-rem(10px);
+
+    &__title {
+      color: $text_color;
+      font-size: to-rem(18px);
+      font-weight: 500;
+      margin-bottom: to-rem(20px);
+    }
+
+    &__login__button {
+      width: 100% !important;
+      margin-top: to-rem(20px) !important;
+      margin-bottom: to-rem(10px) !important;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &__forgot__password {
+      margin: to-rem(10px);
+      font-weight: 300;
+      color: $link !important;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &__new__here {
+      color: $text_color !important;
+      font-weight: 300;
+    }
+
+    &__create__account {
+      color: $link !important;
+      font-weight: 300;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
