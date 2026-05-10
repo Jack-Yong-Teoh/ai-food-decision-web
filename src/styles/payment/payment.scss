@@ -1,0 +1,313 @@
+@use "sass:math";
+@use "../color.scss" as *;
+@use "../general.scss" as *;
+
+.payment {
+  padding: to-rem(24px);
+  width: 100%;
+  box-sizing: border-box;
+
+  &__header {
+    text-align: center;
+    margin-bottom: to-rem(32px);
+
+    &-title {
+      color: $text-color;
+      font-size: to-rem(32px);
+      margin-bottom: to-rem(8px);
+    }
+    
+    &-subtitle {
+      color: $secondary-text-color;
+      font-size: to-rem(16px);
+    }
+  }
+
+  &__balance {
+    background: linear-gradient(135deg, $primary 0%, #00bc7d 100%);
+    border-radius: to-rem(16px);
+    padding: to-rem(48px) to-rem(24px);
+    text-align: center;
+    box-shadow: 0 to-rem(8px) to-rem(32px) rgba(0, 188, 125, 0.2);
+    margin-bottom: to-rem(48px);
+    
+    &-icon {
+      font-size: to-rem(40px);
+      color: $white;
+      margin-bottom: to-rem(16px);
+    }
+
+    &-title {
+      color: $white;
+      font-size: to-rem(16px);
+      margin-bottom: to-rem(8px);
+    }
+
+    &-amount {
+      color: $white;
+      font-size: to-rem(48px);
+      font-weight: 600;
+    }
+  }
+
+  &__packages {
+    &-title {
+      color: $text-color;
+      font-size: to-rem(20px);
+      margin-bottom: to-rem(24px);
+    }
+    
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: to-rem(24px);
+      margin-bottom: to-rem(32px);
+      
+      @media (max-width: 992px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      @media (max-width: 576px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  &__package {
+    background-color: $secondary-2;
+    border-radius: to-rem(12px);
+    padding: to-rem(32px) to-rem(24px);
+    text-align: center;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &:hover {
+      background-color: $secondary-3;
+    }
+
+    &--selected {
+      border-color: $primary;
+      background-color: $secondary-3;
+      box-shadow: 0 0 to-rem(16px) rgba(0, 153, 102, 0.2);
+    }
+
+    &-badge {
+      position: absolute;
+      top: to-rem(-12px);
+      background-color: $primary;
+      color: $white;
+      padding: to-rem(4px) to-rem(16px);
+      border-radius: to-rem(16px);
+      font-size: to-rem(12px);
+      font-weight: 600;
+    }
+
+    &-icon {
+      font-size: to-rem(32px);
+      color: $primary;
+      margin-bottom: to-rem(16px);
+    }
+
+    &-title {
+      color: $text-color;
+      font-size: to-rem(18px);
+      font-weight: 600;
+      margin-bottom: to-rem(8px);
+    }
+
+    &-tokens {
+      color: $text-color;
+      font-size: to-rem(24px);
+      font-weight: 600;
+      margin-bottom: to-rem(4px);
+    }
+    
+    &-tokens-label {
+      color: $secondary-text-color;
+      font-size: to-rem(14px);
+      margin-bottom: to-rem(24px);
+    }
+
+    &-price {
+      color: $text-color;
+      font-size: to-rem(24px);
+      font-weight: 600;
+      margin-bottom: to-rem(8px);
+    }
+
+    &-save {
+      color: $primary;
+      font-size: to-rem(14px);
+      margin-bottom: to-rem(16px);
+    }
+
+    &-save--hidden {
+      visibility: hidden;
+    }
+
+    &-unit-price {
+      color: $secondary-text-color;
+      font-size: to-rem(12px);
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    height: to-rem(56px);
+    font-size: to-rem(16px);
+    font-weight: 600;
+    border-radius: to-rem(8px);
+    margin-bottom: to-rem(16px);
+  }
+
+  &__disclaimer {
+    text-align: center;
+    color: $secondary-text-color;
+    font-size: to-rem(14px);
+    margin-bottom: to-rem(48px);
+  }
+
+  &__form-row {
+    display: flex;
+    gap: to-rem(16px);
+  }
+
+  &__form-col {
+    flex: 1;
+  }
+
+  &__submit-button {
+    width: 100%;
+    height: to-rem(48px);
+    margin-top: to-rem(16px);
+  }
+
+  &__history {
+    &-title {
+      display: flex;
+      align-items: center;
+      gap: to-rem(12px);
+      color: $text-color;
+      font-size: to-rem(20px);
+      margin-bottom: to-rem(24px);
+    }
+  }
+
+  &__footer {
+    border-top: 1px solid $secondary-3;
+    padding-top: to-rem(32px);
+    margin-top: to-rem(48px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: to-rem(12px);
+    text-align: center;
+
+    &-logo {
+      display: flex;
+      align-items: center;
+      gap: to-rem(8px);
+      margin-bottom: to-rem(8px);
+      
+      &-icon {
+        color: $primary;
+        font-size: to-rem(24px);
+      }
+      &-text {
+        color: $primary;
+        font-size: to-rem(20px);
+        font-weight: 600;
+      }
+    }
+
+    &-text {
+      color: $secondary-text-color;
+      font-size: to-rem(14px);
+      margin-bottom: to-rem(4px);
+    }
+
+    &-text--emphasis {
+      font-weight: 600;
+      margin-top: to-rem(8px);
+    }
+
+    &-copyright {
+      color: $secondary-text-color;
+      font-size: to-rem(12px);
+      margin-top: to-rem(24px);
+    }
+  }
+}
+
+.payment-modal {
+  .ant-modal-content {
+    background-color: $secondary !important;
+    border-radius: to-rem(16px);
+    padding: to-rem(32px) !important;
+  }
+  
+  .ant-modal-header {
+    background: transparent;
+    margin-bottom: to-rem(24px);
+  }
+  
+  .ant-modal-title {
+    color: $text-color !important;
+    font-size: to-rem(20px);
+    font-weight: 600;
+  }
+  
+  .ant-modal-close {
+    color: $text-color !important;
+  }
+
+  .ant-form-item-label {
+    label {
+      color: $text-color !important;
+      font-weight: 500;
+    }
+  }
+}
+
+.payment-success {
+  text-align: center;
+  padding: to-rem(24px) 0;
+
+  &__icon {
+    font-size: to-rem(64px);
+    color: $primary;
+    margin-bottom: to-rem(16px);
+  }
+
+  &__title {
+    color: $text-color;
+    font-size: to-rem(24px);
+    font-weight: 600;
+    margin-bottom: to-rem(16px);
+  }
+
+  &__message {
+    color: $secondary-text-color;
+    font-size: to-rem(16px);
+    margin-bottom: to-rem(32px);
+  }
+
+  &__button {
+    width: 100%;
+    height: to-rem(48px);
+  }
+}
+
+.payment-history-badge {
+  background-color: rgba(0, 153, 102, 0.1);
+  color: $primary;
+  padding: to-rem(4px) to-rem(12px);
+  border-radius: to-rem(16px);
+  font-size: to-rem(12px);
+  border: 1px solid $primary;
+}
