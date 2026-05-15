@@ -187,6 +187,22 @@
     margin-top: to-rem(16px);
   }
 
+  &__otp {
+    margin-bottom: to-rem(16px);
+
+    &-title {
+      color: $text-color;
+      font-size: to-rem(18px);
+      font-weight: 600;
+      margin-bottom: to-rem(8px);
+    }
+
+    &-subtitle {
+      color: $secondary-text-color;
+      font-size: to-rem(14px);
+    }
+  }
+
   &__history {
     &-title {
       display: flex;

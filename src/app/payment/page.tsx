@@ -3,7 +3,6 @@
 import "@/styles/payment/payment.scss";
 
 import React, { useState } from "react";
-import { Form } from "antd";
 import dayjs from "dayjs";
 
 import { PaymentData, processPayment } from "@/services/api/payment";
@@ -51,7 +50,6 @@ const PACKAGES: Package[] = [
 ];
 
 const PaymentPage: React.FC = () => {
-  const [form] = Form.useForm();
   const [tokenBalance, setTokenBalance] = useState<number>(0);
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
@@ -72,7 +70,6 @@ const PaymentPage: React.FC = () => {
 
   const handleClosePaymentModal = () => {
     setIsPaymentModalOpen(false);
-    form.resetFields();
   };
 
   const handlePaymentSubmit = async (values: PaymentData) => {
@@ -99,7 +96,6 @@ const PaymentPage: React.FC = () => {
       ]);
 
       setIsPaymentModalOpen(false);
-      form.resetFields();
       setIsSuccessModalOpen(true);
     } catch (error) {
       handleApiError(error, "Payment failed. Please try again.");
@@ -125,7 +121,6 @@ const PaymentPage: React.FC = () => {
         <PaymentHistory paymentHistory={paymentHistory} />
         <PaymentFooter />
         <PaymentModal
-          form={form}
           isOpen={isPaymentModalOpen}
           isProcessing={isProcessing}
           selectedPackage={selectedPackage}
