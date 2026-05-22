@@ -1,0 +1,319 @@
+@use "../color.scss" as *;
+@use "../general.scss" as *;
+
+.about-us {
+  color: $text-color;
+
+  .ant-typography {
+    margin-bottom: 0;
+  }
+
+  &__hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(to-rem(260px), 0.6fr);
+    gap: to-rem(18px);
+    align-items: stretch;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    &__content,
+    &__panel {
+      border: 1px solid rgba($gray, 0.16);
+      border-radius: to-rem(12px);
+      background: $secondary;
+    }
+
+    &__content {
+      padding: to-rem(42px);
+
+      @media (max-width: 768px) {
+        padding: to-rem(30px);
+      }
+
+      @media (max-width: 430px) {
+        padding: to-rem(22px);
+      }
+    }
+
+    &__eyebrow {
+      display: inline-flex;
+      margin-bottom: to-rem(14px);
+      color: $secondary-4 !important;
+      font-size: to-rem(14px);
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    &__title {
+      max-width: to-rem(760px);
+      margin: 0 !important;
+      color: $text-color !important;
+      font-size: to-rem(42px) !important;
+      font-weight: 750 !important;
+      line-height: 1.15 !important;
+
+      @media (max-width: 768px) {
+        font-size: to-rem(34px) !important;
+      }
+
+      @media (max-width: 430px) {
+        font-size: to-rem(26px) !important;
+      }
+    }
+
+    &__description {
+      display: block;
+      max-width: to-rem(680px);
+      margin-top: to-rem(18px);
+      color: $secondary-text-color !important;
+      font-size: to-rem(18px);
+      line-height: 1.6;
+
+      @media (max-width: 430px) {
+        font-size: to-rem(14px);
+      }
+    }
+
+    &__actions {
+      margin-top: to-rem(30px);
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      &__button {
+        min-width: to-rem(160px);
+        height: to-rem(42px) !important;
+
+        @media (max-width: 768px) {
+          width: 100%;
+          min-width: 0;
+        }
+      }
+    }
+
+    &__panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: to-rem(300px);
+      padding: to-rem(28px);
+      background:
+        linear-gradient(180deg, rgba($secondary-4, 0.12), transparent 46%),
+        $secondary;
+
+      @media (max-width: 768px) {
+        min-height: auto;
+      }
+
+      @media (max-width: 430px) {
+        padding: to-rem(22px);
+      }
+
+      &__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: to-rem(58px);
+        height: to-rem(58px);
+        margin-bottom: auto;
+        border-radius: to-rem(12px);
+        background: rgba($secondary-4, 0.16);
+        color: $secondary-4;
+        font-size: to-rem(26px);
+
+        @media (max-width: 768px) {
+          margin-bottom: to-rem(34px);
+        }
+      }
+
+      &__label {
+        color: $secondary-text-color !important;
+        font-size: to-rem(14px);
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      &__value {
+        display: block;
+        margin-top: to-rem(10px);
+        color: $text-color !important;
+        font-size: to-rem(22px);
+        font-weight: 700;
+        line-height: 1.35;
+
+        @media (max-width: 430px) {
+          font-size: to-rem(18px);
+        }
+      }
+    }
+  }
+
+  &__features {
+    margin-top: to-rem(18px);
+
+    &__card {
+      height: 100%;
+      border: 1px solid rgba($gray, 0.16) !important;
+      border-radius: to-rem(12px) !important;
+      background: $secondary !important;
+
+      .ant-card-body {
+        min-height: to-rem(220px);
+        padding: to-rem(24px) !important;
+      }
+
+      &__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: to-rem(46px);
+        height: to-rem(46px);
+        border-radius: to-rem(10px);
+        background: rgba($secondary-4, 0.12);
+        color: $secondary-4;
+        font-size: to-rem(22px);
+      }
+
+      &__title {
+        margin: to-rem(18px) 0 to-rem(10px) !important;
+        color: $text-color !important;
+        font-size: to-rem(18px) !important;
+        line-height: 1.3 !important;
+      }
+
+      &__description {
+        color: $secondary-text-color !important;
+        font-size: to-rem(14px);
+        line-height: 1.6;
+      }
+    }
+  }
+
+  &__story,
+  &__contact {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: to-rem(22px);
+    margin-top: to-rem(18px);
+    padding: to-rem(30px);
+    border: 1px solid rgba($gray, 0.16);
+    border-radius: to-rem(12px);
+    background: $secondary;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      padding: to-rem(24px);
+    }
+
+    @media (max-width: 430px) {
+      padding: to-rem(18px);
+    }
+  }
+
+  &__story {
+    &__title,
+    &__description {
+      display: block;
+    }
+
+    &__title {
+      margin: 0 !important;
+      color: $text-color !important;
+      font-size: to-rem(28px) !important;
+
+      @media (max-width: 430px) {
+        font-size: to-rem(22px) !important;
+      }
+    }
+
+    &__description {
+      margin-top: to-rem(14px);
+      color: $secondary-text-color !important;
+      font-size: to-rem(15px);
+      line-height: 1.7;
+    }
+
+    &__steps {
+      display: flex;
+      flex-direction: column;
+      gap: to-rem(12px);
+
+      &__item {
+        display: grid;
+        grid-template-columns: to-rem(42px) minmax(0, 1fr);
+        gap: to-rem(12px);
+        align-items: center;
+        padding: to-rem(14px);
+        border: 1px solid rgba($gray, 0.12);
+        border-radius: to-rem(10px);
+        background: $secondary-2;
+
+        &__number {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: to-rem(42px);
+          height: to-rem(42px);
+          border-radius: to-rem(10px);
+          background: $primary;
+          color: $white;
+          font-weight: 800;
+        }
+
+        &__text {
+          color: $text-color !important;
+          font-size: to-rem(15px);
+          line-height: 1.45;
+        }
+      }
+    }
+  }
+
+  &__contact {
+    align-items: center;
+    margin-bottom: to-rem(10px);
+
+    &__title {
+      margin: 0 !important;
+      color: $text-color !important;
+      font-size: to-rem(26px) !important;
+
+      @media (max-width: 430px) {
+        font-size: to-rem(21px) !important;
+      }
+    }
+
+    &__description {
+      display: block;
+      margin-top: to-rem(12px);
+      color: $secondary-text-color !important;
+      font-size: to-rem(15px);
+      line-height: 1.65;
+    }
+
+    &__details {
+      width: 100%;
+
+      &__item {
+        display: flex;
+        align-items: center;
+        gap: to-rem(12px);
+        padding: to-rem(13px) to-rem(14px);
+        border: 1px solid rgba($gray, 0.12);
+        border-radius: to-rem(10px);
+        background: $secondary-2;
+        color: $secondary-4;
+
+        .ant-typography {
+          color: $text-color !important;
+          overflow-wrap: anywhere;
+        }
+      }
+    }
+  }
+}
