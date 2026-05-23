@@ -33,7 +33,7 @@ const PaymentPackages = ({
           {pkg.isPopular && (
             <div className="payment__package-badge">Most Popular</div>
           )}
-          <TokenIcon className="payment__package-icon" />
+          <TokenIcon className="payment__package-icon" variant="primary" />
           <div className="payment__package-title">{pkg.name}</div>
           <div className="payment__package-tokens">{pkg.tokens}</div>
           <div className="payment__package-tokens-label">Tokens</div>

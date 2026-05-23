@@ -8,7 +8,6 @@ import React, {
 import { usePathname, useRouter } from "next/navigation";
 import { Button, Dropdown, Image, Layout, Menu, message, Skeleton } from "antd";
 import { AxiosError } from "axios";
-import Icon from "@ant-design/icons";
 import {
   BulbOutlined,
   CoffeeOutlined,
@@ -22,6 +21,7 @@ import {
 
 import LoginModal from "@/app/_components/layout/LoginModal";
 import IMAGES from "@/assets/images";
+import coinsSecondary from "@/assets/paymentassets/coins-secondary.svg";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { setCollapsed } from "@/redux/slices/layoutSlice";
@@ -42,23 +42,6 @@ import { GetUserDropdownItems } from "./UserDropdownMenu";
 
 const { Header, Sider } = Layout;
 
-const WalletCoinsSvg = () => (
-  <svg
-    width="1em"
-    height="1em"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M13.744 17.736a6 6 0 1 1-7.48-7.48" />
-    <path d="M15 6h1v4" />
-    <path d="m6.134 14.768.866-.5 2 3.464" />
-    <circle cx="16" cy="8" r="6" />
-  </svg>
-);
 
 interface LayoutSectionProps {
   children: ReactNode;
@@ -278,8 +261,9 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
               <>
                 <Button
                   icon={
-                    <Icon
-                      component={WalletCoinsSvg}
+                    <Image
+                      preview={false}
+                      src={coinsSecondary.src}
                       className={`layout__section__header__middle__container__button__container__wallet__button__icon`}
                     />
                   }

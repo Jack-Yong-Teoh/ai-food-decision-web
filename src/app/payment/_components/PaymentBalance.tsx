@@ -8,7 +8,7 @@ interface PaymentBalanceProps {
 
 const PaymentBalance = ({ tokenBalance }: PaymentBalanceProps) => (
   <div className="payment__balance">
-    <TokenIcon className="payment__balance-icon" />
+    <TokenIcon className="payment__balance-icon" variant="light" />
     <div className="payment__balance-title">Current Balance</div>
     <div className="payment__balance-amount">{tokenBalance} Tokens</div>
   </div>
