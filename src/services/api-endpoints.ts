@@ -17,4 +17,8 @@ export const ENDPOINT = {
 
   //wallet
   getWallet: `/wallet?wallet_id=%d`,
+
+  //transaction
+  createTransaction: `/transaction`,
+  lazyloadTransactions: `/transactions`,
 };

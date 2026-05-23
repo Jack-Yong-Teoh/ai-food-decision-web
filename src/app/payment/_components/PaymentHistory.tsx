@@ -8,9 +8,10 @@ import type { ColumnsType } from "antd/es/table";
 
 interface PaymentHistoryProps {
   paymentHistory: PaymentHistoryRecord[];
+  loading?: boolean;
 }
 
-const PaymentHistory = ({ paymentHistory }: PaymentHistoryProps) => {
+const PaymentHistory = ({ paymentHistory, loading }: PaymentHistoryProps) => {
   const columns: ColumnsType<PaymentHistoryRecord> = [
     {
       title: "Date",
@@ -18,22 +19,21 @@ const PaymentHistory = ({ paymentHistory }: PaymentHistoryProps) => {
       key: "date",
     },
     {
-      title: "Package",
-      dataIndex: "packageName",
-      key: "packageName",
+      title: "Reference",
+      dataIndex: "reference",
+      key: "reference",
       render: (text: string) => <strong>{text}</strong>,
     },
     {
-      title: "Tokens",
-      dataIndex: "tokens",
-      key: "tokens",
-      render: (tokens: number) => `${tokens} tokens`,
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
     },
     {
-      title: "Amount",
+      title: "Tokens",
       dataIndex: "amount",
       key: "amount",
-      render: (amount: number) => `$${amount.toFixed(2)}`,
+      render: (amount: number) => `${amount} tokens`,
     },
     {
       title: "Status",
@@ -54,6 +54,7 @@ const PaymentHistory = ({ paymentHistory }: PaymentHistoryProps) => {
         dataSource={paymentHistory}
         columns={columns}
         pagination={false}
+        loading={loading}
         locale={{ emptyText: "No payment history found." }}
       />
     </div>
