@@ -28,8 +28,8 @@
     }
 
     &__icon {
-      font-size: to-rem(48px);
-      color: $secondary-3;
+      font-size: to-rem(68px);
+      color: $secondary-3 !important;
       margin-bottom: to-rem(16px);
     }
 
@@ -56,7 +56,6 @@
   &__header {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
     margin-bottom: to-rem(24px);
 
     &__info {
@@ -76,27 +75,6 @@
     &__count {
       font-size: to-rem(14px);
       font-family: "Muli", Arial, Helvetica, sans-serif;
-    }
-
-    &__clear-btn {
-      background-color: transparent !important;
-      color: $danger !important;
-      font-family: "Muli", Arial, Helvetica, sans-serif;
-      border: 1px solid $danger !important;
-      border-radius: to-rem(6px) !important;
-      height: to-rem(36px) !important;
-
-      &:hover {
-        background-color: rgba($danger, 0.1) !important;
-        border-color: $danger !important;
-        color: $danger !important;
-        font-family: "Muli", Arial, Helvetica, sans-serif;
-      }
-
-      .anticon {
-        color: $danger !important;
-        font-family: "Muli", Arial, Helvetica, sans-serif;
-      }
     }
   }
 
@@ -161,7 +139,7 @@
 
       &-icon {
         font-size: to-rem(14px);
-        color: $secondary-text-color;
+        color: $secondary-text-color !important;
       }
 
       &-text {
