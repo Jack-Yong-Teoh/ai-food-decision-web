@@ -17,4 +17,7 @@ export const ENDPOINT = {
 
   //wallet
   getWallet: `/wallet?wallet_id=%d`,
+
+  //recommend
+  recommend: `/food`,
 };
