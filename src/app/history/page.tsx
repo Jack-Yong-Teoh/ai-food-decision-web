@@ -3,64 +3,85 @@ import '../../styles/history/history.scss';
 import React, { useEffect, useState } from "react";
 import {
   Typography,
-  Button,
   Image,
   Spin,
   Empty,
-  Popconfirm,
+  message,
 } from "antd";
 import {
   ClockCircleOutlined,
-  DeleteOutlined,
   CalendarOutlined,
   ShopOutlined,
   FireOutlined,
 } from "@ant-design/icons";
 import LayoutSection from "../_components/layout/LayoutSection";
-
+import { getFoods, GetFoodsResponse, FoodItem } from "@/services/api/history";
 
 const { Title, Text } = Typography;
 
+// 页面展示用的历史记录类型
 interface HistoryItem {
   id: string;
   name: string;
   cuisine: string;
   description: string;
-  calories: number;
+  calories: string;
   image: string;
   date: string;
 }
 
-// 改成 [] 即可看到空状态（第一张图）
-const MOCK_HISTORY_DATA: HistoryItem[] = [
-  {
-    id: "1",
-    name: "Margherita Pizza",
-    cuisine: "Italian Cuisine",
-    description: "Classic Italian pizza with fresh mozzarella, tomatoes, and basil on a crispy thin crust.",
-    calories: 520,
-    image: "/assets/images/margherita-pizza.webp",
-    date: "2026/5/12",
-  },
-];
-
 const HistoryPage: React.FC = () => {
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [clearing, setClearing] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+
+  /**
+   * 将 API 数据映射到页面展示结构
+   */
+  const mapApiToHistoryItems = (foods: FoodItem[]): HistoryItem[] => {
+    return foods.map((item) => ({
+      id: String(item.id),
+      name: item.food_name,
+      cuisine: item.food_type,
+      description: item.description,
+      calories: item.calories,
+      image: item.image_url,
+      date: new Date(item.created_date).toLocaleDateString("zh-CN"),
+    }));
+  };
 
   const fetchHistory = async () => {
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setHistoryItems(MOCK_HISTORY_DATA);
-    setLoading(false);
-  };
+    try {
+      const params = {
+        filters: [],
+        search: "",
+        pagination: {
+          limit: 10,
+          page: 1,
+        },
+        sort: {
+          order_by: "id",
+          sort_order: "desc" as const,
+        },
+        included_fields: [],
+        excluded_fields: [],
+        export: false,
+      };
 
-  const handleClearHistory = async () => {
-    setClearing(true);
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    setHistoryItems([]);
-    setClearing(false);
+      const response: GetFoodsResponse = await getFoods(params);
+
+      const mappedItems = mapApiToHistoryItems(response.data);
+      setHistoryItems(mappedItems);
+      setTotalCount(response.count);
+    } catch (error: any) {
+      console.error("Fetch history failed:", error);
+      message.error(error.response?.data?.message || "Failed to load history");
+      setHistoryItems([]);
+      setTotalCount(0);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -106,25 +127,9 @@ const HistoryPage: React.FC = () => {
               Decision History
             </Title>
             <Text className="history__header__count secondary__text">
-              {historyItems.length} recommendation saved
+              {totalCount} recommendation{totalCount !== 1 ? 's' : ''} saved
             </Text>
           </div>
-          <Popconfirm
-            title="Clear History"
-            description="Are you sure you want to clear all history?"
-            onConfirm={handleClearHistory}
-            okText="Yes"
-            cancelText="No"
-            okButtonProps={{ loading: clearing }}
-          >
-            <Button
-              className="history__header__clear-btn"
-              icon={<DeleteOutlined />}
-              loading={clearing}
-            >
-              Clear History
-            </Button>
-          </Popconfirm>
         </div>
 
         <div className="history__list">
