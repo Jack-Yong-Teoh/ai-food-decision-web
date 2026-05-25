@@ -2,12 +2,20 @@
 import '../../styles/recommend/recommend.scss';
 
 import React, { useState } from "react";
-import { Button, Form, Image,Input, Select, Space } from "antd";
-import { FileTextOutlined, FireOutlined, SettingOutlined,UnorderedListOutlined } from "@ant-design/icons";
-
+import { Button, Form, Image, Input, Select, Space, message } from "antd";
+import { FileTextOutlined, FireOutlined, SettingOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { TagOutlined } from "@ant-design/icons";
 import LayoutSection from "../_components/layout/LayoutSection";
+import { 
+  recommend, 
+  RecommendParams,
+  RecommendResponse,
+  ApiErrorResponse,
+  ValidationErrorResponse,
+} from "@/services/api/recommend";
 
 const { TextArea } = Input;
+
 
 const cuisineOptions = [
   { value: 'any', label: 'Any' },
@@ -51,10 +59,11 @@ const moodOptions = [
   { value: 'adventurous', label: 'Adventurous' },
 ];
 
+// 页面展示用的结果类型
 interface RecommendationResult {
   name: string;
   cuisine: string;
-  calories: number;
+  calories: string;
   description: string;
   ingredients: string[];
   imageUrl: string;
@@ -71,101 +80,146 @@ const RecommendPage: React.FC = () => {
 
   const handleDietaryClick = (value: string) => {
     setSelectedDietary((prev) => {
-      // If clicking "None"
-      if (value === "None") {
-        return ["None"];
-      }
-
-      // If clicking a non-None option while "None" is selected
-      if (prev.includes("None")) {
-        return [value];
-      }
-
-      // If clicking an already selected non-None option, deselect it
+      if (value === "None") return ["None"];
+      if (prev.includes("None")) return [value];
       if (prev.includes(value)) {
         const newSelection = prev.filter((item) => item !== value);
-        // If nothing left, default to "None"
         return newSelection.length > 0 ? newSelection : ["None"];
       }
-
-      // Otherwise, add the new option
       return [...prev, value];
     });
+  };
+
+  /**
+   * 处理 API 错误，提取错误信息
+   */
+  const getErrorMessage = (error: any): string => {
+    if (!error.response) {
+      return "Network error, please check your connection";
+    }
+
+    const status = error.response.status;
+    const data = error.response.data;
+
+    // 422 参数校验错误
+    if (status === 422 && data?.detail) {
+      const details = data.detail as Array<{ msg: string; loc: (string | number)[] }>;
+      const messages = details.map((d) => {
+        const field = d.loc[d.loc.length - 1];
+        return `${field}: ${d.msg}`;
+      });
+      return messages.join("; ");
+    }
+
+    // 通用错误 (400, 401, 403, 404, 409, 500)
+    if (data?.message) {
+      return data.message;
+    }
+
+    // 默认错误
+    switch (status) {
+      case 400: return "Bad request, please check your input";
+      case 401: return "Unauthorized, please login";
+      case 403: return "Forbidden, you don't have permission";
+      case 404: return "Not found";
+      case 409: return "Conflict, please try again";
+      case 500: return "Server error, please try again later";
+      default: return `Request failed (${status})`;
+    }
+  };
+
+  /**
+   * 将 API 响应映射到页面展示结构
+   */
+  const mapApiToResult = (apiResult: RecommendResponse, notes: string): RecommendationResult => {
+    return {
+      name: apiResult.food_name,
+      cuisine: apiResult.food_type + " Cuisine",
+      calories: apiResult.calories,
+      description: apiResult.description,
+      ingredients: apiResult.ingredients
+        ? apiResult.ingredients.replace(/^\{/, '').replace(/\}$/, '').split(",").map((s: string) => s.trim())
+        : [],
+      imageUrl: apiResult.image_url,
+      notes: notes || "-",
+    };
   };
 
   const handleGenerate = async () => {
     try {
       await form.validateFields();
       setLoading(true);
+      setResult(null); // 清除之前的结果
 
-      // 获取最新的表单值
+      // 获取表单值
       const currentValues = form.getFieldsValue();
-      currentValues.notes = notesInput;
-      setSubmittedValues(currentValues);
+      const notesValue = notesInput || "";
+      setSubmittedValues({ ...currentValues, notes: notesValue });
 
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Mock result - in real app this would come from API
-      const mockResult: RecommendationResult = {
-        name: "Margherita Pizza",
-        cuisine: currentValues.cuisine+" cuisine" || 'any',
-        calories: 520,
-        description:
-          "Classic Italian pizza with fresh mozzarella, tomatoes, and basil on a crispy thin crust.",
-        ingredients: [
-          "Pizza dough",
-          "Mozzarella",
-          "Tomatoes",
-          "Basil",
-          "Olive oil",
-        ],
-        imageUrl:
-          "../../assets/project/food-genie-logo.png",
-        notes: notesInput || '',
+      // 组装 API 参数
+      const apiParams: RecommendParams = {
+        food_type: currentValues.cuisine === 'any' ? 'any' : currentValues.cuisine,
+        meal_type: currentValues.meal === 'any' ? 'any' : currentValues.meal,
+        dietary_restriction: selectedDietary.join(", "),
+        mood: currentValues.mood === 'any' ? 'any' : currentValues.mood,
+        additional_notes: notesValue,
+        token_consumed: 1,
       };
 
-      setResult(mockResult);
-    } catch (error) {
-      console.error("Form validation failed:", error);
+      // 调用真实 API
+      const apiResult: RecommendResponse = await recommend(apiParams);
+
+      // 映射并展示结果
+      const mappedResult = mapApiToResult(apiResult, notesValue);
+      setResult(mappedResult);
+      message.success("Recommendation generated successfully!");
+
+    } catch (error: any) {
+      console.error("API call failed:", error);
+      const errorMsg = getErrorMessage(error);
+      message.error(errorMsg);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <LayoutSection>
       <Space direction="vertical" size="middle" className="recommend-header">
         <div className="recommend-title">What Should You Eat Today?</div>
         <div className="recommend-subtitle">
-          Tell us your preferences and let AI recommend the perfect meal for
-          you!
+          Tell us your preferences and let AI recommend the perfect meal for you!
         </div>
       </Space>
 
       <div className="recommend-form-card">
-        <Form form={form} layout="vertical" className="recommend-form" >
+        <Form form={form} layout="vertical" className="recommend-form">
           {/* Cuisine Type */}
-          <Form.Item className="form-item" name="cuisine" initialValue="any"
+          <Form.Item 
+            className="form-item" 
+            name="cuisine" 
+            initialValue="any"
             label={<div className="form-label">Cuisine Type</div>}
           >
             <Select 
               options={cuisineOptions} 
               className="recommend-select"
               classNames={{ popup: { root: "recommend-select-dropdown" } }}
-              defaultValue="any"
             />
           </Form.Item>
 
           {/* Meal Type */}
-          <Form.Item className="form-item" name="meal" initialValue="any"
+          <Form.Item 
+            className="form-item" 
+            name="meal" 
+            initialValue="any"
             label={<div className="form-label">Meal Type</div>}
           >
             <Select 
               options={mealOptions} 
               className="recommend-select"
               classNames={{ popup: { root: "recommend-select-dropdown" } }}
-              defaultValue="any"
             />
           </Form.Item>
 
@@ -188,33 +242,33 @@ const RecommendPage: React.FC = () => {
           </Form.Item>
 
           {/* Style Type */}
-          <Form.Item className="form-item" name="mood" initialValue="any"
+          <Form.Item 
+            className="form-item" 
+            name="mood" 
+            initialValue="any"
             label={<div className="form-label">Style Type</div>}
           >
             <Select 
               options={moodOptions} 
               className="recommend-select"
               classNames={{ popup: { root: "recommend-select-dropdown" } }}
-              defaultValue="any"
             />
           </Form.Item>
 
           {/* Additional Notes */}
-          <Form.Item className="form-item" name="notes"
-            label={<div className="form-label">Additional Notes</div>}
-          >
-            <TextArea
-              placeholder="Any specific preferences, allergies, or ingredients you'd like to include/avoid..."
-              rows={4}
-              className="recommend-textarea"
-              value={notesInput}
-              onChange={(e) => setNotesInput(e.target.value)}
-            />
-            <div className="form-hint">
-              Example: &quot;No seafood&quot;, &quot;Extra spicy&quot;, &quot;Low
-              carb options&quot;
-            </div>
-          </Form.Item>
+<div className="form-item">
+  <div className="form-label">Additional Notes</div>
+  <TextArea
+    placeholder="Any specific preferences, allergies, or ingredients you'd like to include/avoid..."
+    rows={4}
+    className="recommend-textarea"
+    value={notesInput}
+    onChange={(e) => setNotesInput(e.target.value)}
+  />
+  <div className="form-hint">
+    Example: &quot;No seafood&quot;, &quot;Extra spicy&quot;, &quot;Low carb options&quot;
+  </div>
+</div>
 
           {/* Generate Button */}
           <Button
@@ -246,10 +300,11 @@ const RecommendPage: React.FC = () => {
               className="result-image"
               preview={false}
               fallback="/assets/food-fallback.webp"
+              wrapperStyle={{ width: '100%', height: '100%' }}
             />
             <div className="result-image-overlay">
               <div className="result-name">{result.name}</div>
-              <div className="result-cuisine">{result.cuisine}</div>
+              <div className="result-cuisine"><TagOutlined style={{ marginRight: '6px' }} />{result.cuisine}</div>
             </div>
           </div>
 
@@ -296,7 +351,7 @@ const RecommendPage: React.FC = () => {
                 <div className="preference-item preference-item--full">
                   <span className="preference-label">Notes:</span>
                   <span className="preference-value">
-                    {submittedValues.notes || "-"}
+                    {result.notes || "-"}
                   </span>
                 </div>
               </div>
@@ -305,7 +360,7 @@ const RecommendPage: React.FC = () => {
         </div>
       )}
     </LayoutSection>
-  );  
+  );
 };
 
 export default RecommendPage;
