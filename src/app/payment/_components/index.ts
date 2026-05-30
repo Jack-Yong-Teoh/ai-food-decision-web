@@ -1,5 +1,4 @@
 export { default as PaymentBalance } from "./PaymentBalance";
-export { default as PaymentFooter } from "./PaymentFooter";
 export { default as PaymentHeader } from "./PaymentHeader";
 export { default as PaymentHistory } from "./PaymentHistory";
 export { default as PaymentModal } from "./PaymentModal";

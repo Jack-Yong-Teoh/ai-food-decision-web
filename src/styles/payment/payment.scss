@@ -32,9 +32,15 @@
     margin-bottom: to-rem(48px);
     
     &-icon {
-      width: to-rem(40px);
-      height: to-rem(40px);
+      width: to-rem(70px);
+      height: to-rem(70px);
       margin-bottom: to-rem(16px);
+
+      &.ant-image-img {
+        width: to-rem(70px) !important;
+        height: to-rem(70px) !important;
+        object-fit: contain;
+      }
 
       img {
         width: 100%;
@@ -222,52 +228,22 @@
       font-size: to-rem(20px);
       margin-bottom: to-rem(24px);
     }
-  }
 
-  &__footer {
-    border-top: 1px solid $secondary-3;
-    padding-top: to-rem(32px);
-    margin-top: to-rem(48px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: to-rem(12px);
-    text-align: center;
+    &-table {
+      width: 100%;
+      overflow-x: auto;
 
-    &-logo {
-      display: flex;
-      align-items: center;
-      gap: to-rem(8px);
-      margin-bottom: to-rem(8px);
-      
-      &-icon {
-        color: $primary;
-        font-size: to-rem(24px);
+      .ant-table {
+        min-width: to-rem(600px);
       }
-      &-text {
-        color: $primary;
-        font-size: to-rem(20px);
-        font-weight: 600;
+
+      .ant-typography,
+      .ant-typography strong {
+        color: $white;
       }
     }
-
-    &-text {
-      color: $secondary-text-color;
-      font-size: to-rem(14px);
-      margin-bottom: to-rem(4px);
-    }
-
-    &-text--emphasis {
-      font-weight: 600;
-      margin-top: to-rem(8px);
-    }
-
-    &-copyright {
-      color: $secondary-text-color;
-      font-size: to-rem(12px);
-      margin-top: to-rem(24px);
-    }
   }
+
 }
 
 .payment-modal {
@@ -296,6 +272,51 @@
     label {
       color: $text-color !important;
       font-weight: 500;
+    }
+  }
+
+  &__card-input {
+    &.ant-input-affix-wrapper {
+      padding-right: to-rem(12px);
+    }
+
+    .ant-input-suffix {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      margin-inline-start: to-rem(4px);
+    }
+  }
+
+  &__card-logo-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: to-rem(6px);
+  }
+
+  &__card-logo {
+    width: to-rem(40px);
+    height: to-rem(24px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &--hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  &__card-logo-image {
+    width: 100%;
+    height: auto;
+
+    .ant-image-img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
     }
   }
 }
@@ -336,4 +357,29 @@
   border-radius: to-rem(16px);
   font-size: to-rem(12px);
   border: 1px solid $primary;
+}
+
+@media (max-width: 768px) {
+  .payment {
+    &__history {
+      &-title {
+        font-size: to-rem(18px);
+      }
+
+      &-table {
+        .ant-table {
+          font-size: to-rem(12px);
+        }
+
+        .ant-table-cell {
+          padding: to-rem(8px);
+        }
+      }
+    }
+  }
+
+  .payment-history-badge {
+    font-size: to-rem(10px);
+    padding: to-rem(2px) to-rem(8px);
+  }
 }

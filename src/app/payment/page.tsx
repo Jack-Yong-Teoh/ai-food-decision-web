@@ -1,11 +1,8 @@
 "use client";
 
-import "@/styles/payment/payment.scss";
-
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { PACKAGE_TOKEN_MAP, PRICE_TOKEN_MAP } from "@/constants";
 import { useAppSelector } from "@/redux/hook";
 import {
   createTransaction,
@@ -13,16 +10,17 @@ import {
   PaymentData,
   processPayment,
 } from "@/services/api/payment";
+import { getUserProfile } from "@/services/api/user";
+import { getWallet } from "@/services/api/wallet";
 import { LazyloadParams, OperatorEnum, SortEnum } from "@/types/general";
 import { handleApiError } from "@/utils/apiHelper/errorHandler";
 
-import type { Package, PaymentHistoryRecord } from "./types";
+import type { Package, PaymentHistoryRecord } from "@/types/payment";
 
 import LayoutSection from "../_components/layout/LayoutSection";
 
 import {
   PaymentBalance,
-  PaymentFooter,
   PaymentHeader,
   PaymentHistory,
   PaymentModal,
@@ -65,11 +63,17 @@ const PaymentPage: React.FC = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isBalanceLoading, setIsBalanceLoading] = useState(false);
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryRecord[]>(
     []
   );
-  const walletId = useAppSelector((state) => state.profile.data?.wallet_id);
+  const [historyTotal, setHistoryTotal] = useState(0);
+  const [historyPage, setHistoryPage] = useState(1);
+  const profileWalletId = useAppSelector(
+    (state) => state.profile.data?.wallet_id
+  );
+  const [walletId, setWalletId] = useState<number | null>(null);
 
   const selectedPackage = PACKAGES.find((p) => p.id === selectedPackageId);
 
@@ -82,10 +86,64 @@ const PaymentPage: React.FC = () => {
     setIsPaymentModalOpen(false);
   };
 
-  const fetchTransactions = useCallback(async () => {
+  const resolveWalletBalance = (wallet: unknown) => {
+    if (!wallet || typeof wallet !== "object") {
+      return 0;
+    }
+
+    const walletRecord = wallet as Record<string, unknown>;
+    const balance = walletRecord.balance;
+
+    if (typeof balance === "number" && Number.isFinite(balance)) {
+      return balance;
+    }
+
+    if (typeof balance === "string") {
+      const parsed = Number(balance);
+      if (Number.isFinite(parsed)) {
+        return parsed;
+      }
+    }
+
+    return 0;
+  };
+
+  const fetchWalletId = useCallback(async () => {
+    if (profileWalletId) {
+      setWalletId(profileWalletId);
+      return;
+    }
+
+    try {
+      const profile = await getUserProfile();
+      setWalletId(profile?.wallet_id ?? null);
+    } catch (error) {
+      handleApiError(error, "Failed to load payment data.");
+    }
+  }, [profileWalletId]);
+
+  const fetchWalletBalance = useCallback(async () => {
+    if (!walletId) {
+      setTokenBalance(0);
+      return;
+    }
+
+    setIsBalanceLoading(true);
+    try {
+      const wallet = await getWallet(walletId);
+      setTokenBalance(resolveWalletBalance(wallet));
+    } catch (error) {
+      handleApiError(error, "Failed to load wallet balance.");
+    } finally {
+      setIsBalanceLoading(false);
+    }
+  }, [walletId]);
+
+  const fetchTransactions = useCallback(
+    async (pageNumber: number) => {
     if (!walletId) {
       setPaymentHistory([]);
-      setTokenBalance(0);
+      setHistoryTotal(0);
       return;
     }
 
@@ -102,7 +160,7 @@ const PaymentPage: React.FC = () => {
         search: "",
         pagination: {
           limit: 10,
-          page: 1,
+          page: pageNumber,
         },
         sort: {
           order_by: "created_date",
@@ -119,13 +177,7 @@ const PaymentPage: React.FC = () => {
           typeof record.amount === "number"
             ? record.amount
             : Number(record.amount);
-        const amountKey = Number.isFinite(rawAmount)
-          ? rawAmount.toFixed(2)
-          : "";
-        const normalizedAmount =
-          PACKAGE_TOKEN_MAP[reference] ??
-          PRICE_TOKEN_MAP[amountKey] ??
-          (Number.isFinite(rawAmount) ? rawAmount : 0);
+        const normalizedAmount = Number.isFinite(rawAmount) ? rawAmount : 0;
 
         return {
           key: String(record.id ?? record.reference_id ?? index),
@@ -141,28 +193,8 @@ const PaymentPage: React.FC = () => {
         };
       });
 
-      const totalTokens = (data?.data || []).reduce((sum, record) => {
-        const reference = record.reference_id || "-";
-        const rawAmount =
-          typeof record.amount === "number"
-            ? record.amount
-            : Number(record.amount);
-        const amountKey = Number.isFinite(rawAmount)
-          ? rawAmount.toFixed(2)
-          : "";
-        const normalizedAmount =
-          PACKAGE_TOKEN_MAP[reference] ??
-          PRICE_TOKEN_MAP[amountKey] ??
-          (Number.isFinite(rawAmount) ? rawAmount : 0);
-        const type = record.transaction_type;
-        if (type === "deduct" || type === "payment") {
-          return sum - normalizedAmount;
-        }
-        return sum + normalizedAmount;
-      }, 0);
-
       setPaymentHistory(mapped);
-      setTokenBalance(totalTokens);
+      setHistoryTotal(data?.count ?? 0);
     } catch (error) {
       handleApiError(error, "Failed to load payment history.");
     } finally {
@@ -171,8 +203,17 @@ const PaymentPage: React.FC = () => {
   }, [walletId]);
 
   useEffect(() => {
-    fetchTransactions();
-  }, [fetchTransactions]);
+    fetchWalletId();
+  }, [fetchWalletId]);
+
+  useEffect(() => {
+    if (!walletId) {
+      return;
+    }
+    setHistoryPage(1);
+    fetchWalletBalance();
+    fetchTransactions(1);
+  }, [walletId, fetchTransactions, fetchWalletBalance]);
 
 
   const handlePaymentSubmit = async (values: PaymentData) => {
@@ -193,10 +234,7 @@ const PaymentPage: React.FC = () => {
       });
 
       // On Success
-      setTokenBalance((prev) => prev + selectedPackage.tokens);
-      window.dispatchEvent(new CustomEvent("addTokens", { detail: { tokens: selectedPackage.tokens } }));
-      
-      await fetchTransactions();
+      await Promise.all([fetchWalletBalance(), fetchTransactions(historyPage)]);
 
       setIsPaymentModalOpen(false);
       setIsSuccessModalOpen(true);
@@ -214,7 +252,10 @@ const PaymentPage: React.FC = () => {
           title="Get More Tokens"
           subtitle="Choose a package to continue getting food recommendations"
         />
-        <PaymentBalance tokenBalance={tokenBalance} loading={isHistoryLoading} />
+        <PaymentBalance
+          tokenBalance={tokenBalance}
+          loading={isBalanceLoading}
+        />
         <PaymentPackages
           packages={PACKAGES}
           selectedPackageId={selectedPackageId}
@@ -224,8 +265,14 @@ const PaymentPage: React.FC = () => {
         <PaymentHistory
           paymentHistory={paymentHistory}
           loading={isHistoryLoading}
+          currentPage={historyPage}
+          total={historyTotal}
+          onPageChange={(pageNumber) => {
+            setHistoryPage(pageNumber);
+            fetchTransactions(pageNumber);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
         />
-        <PaymentFooter />
         <PaymentModal
           isOpen={isPaymentModalOpen}
           isProcessing={isProcessing}

@@ -2,7 +2,7 @@
 
 import { Button } from "antd";
 
-import type { Package } from "../types";
+import type { Package } from "@/types/payment";
 
 import TokenIcon from "./TokenIcon";
 
@@ -58,7 +58,7 @@ const PaymentPackages = ({
       disabled={!selectedPackageId}
       onClick={onOpenPaymentModal}
     >
-      Select a Package
+      Make the Payment
     </Button>
 
     <div className="payment__disclaimer">

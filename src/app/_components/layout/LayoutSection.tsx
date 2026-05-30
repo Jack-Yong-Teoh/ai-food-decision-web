@@ -12,6 +12,7 @@ import {
   BulbOutlined,
   CoffeeOutlined,
   CreditCardOutlined,
+  DollarOutlined,
   HistoryOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -21,8 +22,6 @@ import {
 
 import LoginModal from "@/app/_components/layout/LoginModal";
 import IMAGES from "@/assets/images";
-import coinsSecondary from "@/assets/paymentassets/coins-secondary.svg";
-import { PACKAGE_TOKEN_MAP, PRICE_TOKEN_MAP } from "@/constants";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { setCollapsed } from "@/redux/slices/layoutSlice";
@@ -33,9 +32,8 @@ import {
   openSignUpModal,
 } from "@/redux/slices/modalSlice";
 import { setProfile } from "@/redux/slices/profileSlice";
-import { lazyloadTransactions } from "@/services/api/payment";
 import { getUserProfile } from "@/services/api/user";
-import { LazyloadParams, OperatorEnum, SortEnum } from "@/types/general";
+import { getWallet } from "@/services/api/wallet";
 import { handleApiError } from "@/utils/apiHelper/errorHandler";
 
 import LayoutFooter from "./Footer";
@@ -43,7 +41,6 @@ import SignUpModal from "./SignUpModal";
 import { GetUserDropdownItems } from "./UserDropdownMenu";
 
 const { Header, Sider } = Layout;
-
 
 interface LayoutSectionProps {
   children: ReactNode;
@@ -214,68 +211,14 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
 
   const fetchWallet = async (wallet_id: number) => {
     try {
-      const params: LazyloadParams = {
-        filters: [
-          {
-            field: "wallet_id",
-            operator: OperatorEnum.equals,
-            value: wallet_id,
-          },
-        ],
-        search: "",
-        pagination: {
-          limit: 100,
-          page: 1,
-        },
-        sort: {
-          order_by: "created_date",
-          sort_order: SortEnum.desc,
-        },
-        included_fields: [],
-        excluded_fields: [],
-        export: false,
-      };
-      const data = await lazyloadTransactions(params);
-      const totalTokens = (data?.data || []).reduce((sum, record) => {
-        const reference = record.reference_id || "-";
-        const rawAmount =
-          typeof record.amount === "number"
-            ? record.amount
-            : Number(record.amount);
-        const amountKey = Number.isFinite(rawAmount)
-          ? rawAmount.toFixed(2)
-          : "";
-        const normalizedAmount =
-          PACKAGE_TOKEN_MAP[reference] ??
-          PRICE_TOKEN_MAP[amountKey] ??
-          (Number.isFinite(rawAmount) ? rawAmount : 0);
-        const type = record.transaction_type;
-        if (type === "deduct" || type === "payment") {
-          return sum - normalizedAmount;
-        }
-        return sum + normalizedAmount;
-      }, 0);
-
-      setWallet({ balance: totalTokens });
+      const data = await getWallet(wallet_id);
+      setWallet(data);
     } catch (error) {
       if (error instanceof AxiosError) {
         handleApiError(error, "Error fetching wallet.");
       }
     }
   };
-
-  useEffect(() => {
-    const handleAddTokens = (e: any) => {
-      setWallet((prev: any) => {
-        if (prev) {
-          return { ...prev, balance: prev.balance + e.detail.tokens };
-        }
-        return { balance: e.detail.tokens };
-      });
-    };
-    window.addEventListener("addTokens", handleAddTokens as EventListener);
-    return () => window.removeEventListener("addTokens", handleAddTokens as EventListener);
-  }, []);
 
   return (
     <Layout className={`layout__section`}>
@@ -304,16 +247,14 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
               <>
                 <Button
                   icon={
-                    <Image
-                      preview={false}
-                      src={coinsSecondary.src}
+                    <DollarOutlined
                       className={`layout__section__header__middle__container__button__container__wallet__button__icon`}
                     />
                   }
                   className={`layout__section__header__middle__container__button__container__wallet__button`}
                   onClick={() => router.push("/payment")}
                 >
-                  {wallet?.balance ?? "-"}
+                  {wallet?.balance.toFixed(2) ?? "-"}
                 </Button>
                 <Dropdown
                   menu={{ items: userDropdownItems }}
