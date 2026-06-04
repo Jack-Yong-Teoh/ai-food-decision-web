@@ -58,7 +58,7 @@ const PACKAGES: Package[] = [
 const PaymentPage: React.FC = () => {
   const [tokenBalance, setTokenBalance] = useState<number>(0);
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
-    null
+    null,
   );
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -66,12 +66,12 @@ const PaymentPage: React.FC = () => {
   const [isBalanceLoading, setIsBalanceLoading] = useState(false);
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryRecord[]>(
-    []
+    [],
   );
   const [historyTotal, setHistoryTotal] = useState(0);
   const [historyPage, setHistoryPage] = useState(1);
   const profileWalletId = useAppSelector(
-    (state) => state.profile.data?.wallet_id
+    (state) => state.profile.data?.wallet_id,
   );
   const [walletId, setWalletId] = useState<number | null>(null);
 
@@ -141,66 +141,68 @@ const PaymentPage: React.FC = () => {
 
   const fetchTransactions = useCallback(
     async (pageNumber: number) => {
-    if (!walletId) {
-      setPaymentHistory([]);
-      setHistoryTotal(0);
-      return;
-    }
+      if (!walletId) {
+        setPaymentHistory([]);
+        setHistoryTotal(0);
+        return;
+      }
 
-    setIsHistoryLoading(true);
-    try {
-      const params: LazyloadParams = {
-        filters: [
-          {
-            field: "wallet_id",
-            operator: OperatorEnum.equals,
-            value: walletId,
+      setIsHistoryLoading(true);
+      try {
+        const params: LazyloadParams = {
+          filters: [
+            {
+              field: "wallet_id",
+              operator: OperatorEnum.equals,
+              value: walletId,
+            },
+          ],
+          search: "",
+          pagination: {
+            limit: 10,
+            page: pageNumber,
           },
-        ],
-        search: "",
-        pagination: {
-          limit: 10,
-          page: pageNumber,
-        },
-        sort: {
-          order_by: "created_date",
-          sort_order: SortEnum.desc,
-        },
-        included_fields: [],
-        excluded_fields: [],
-        export: false,
-      };
-      const data = await lazyloadTransactions(params);
-      const mapped = (data?.data || []).map((record, index) => {
-        const reference = record.reference_id || "-";
-        const rawAmount =
-          typeof record.amount === "number"
-            ? record.amount
-            : Number(record.amount);
-        const normalizedAmount = Number.isFinite(rawAmount) ? rawAmount : 0;
-
-        return {
-          key: String(record.id ?? record.reference_id ?? index),
-          date: record.created_date
-            ? dayjs(record.created_date).format("M/D/YYYY h:mm:ss A")
-            : "-",
-          reference,
-          type: record.transaction_type
-            ? record.transaction_type.replace("_", " ")
-            : "-",
-          amount: normalizedAmount,
-          status: "Completed",
+          sort: {
+            order_by: "created_date",
+            sort_order: SortEnum.desc,
+          },
+          included_fields: [],
+          excluded_fields: [],
+          export: false,
         };
-      });
+        const data = await lazyloadTransactions(params);
+        const mapped = (data?.data || []).map((record, index) => {
+          const reference = record.reference_id || "-";
+          const rawAmount =
+            typeof record.amount === "number"
+              ? record.amount
+              : Number(record.amount);
+          const normalizedAmount = Number.isFinite(rawAmount) ? rawAmount : 0;
 
-      setPaymentHistory(mapped);
-      setHistoryTotal(data?.count ?? 0);
-    } catch (error) {
-      handleApiError(error, "Failed to load payment history.");
-    } finally {
-      setIsHistoryLoading(false);
-    }
-  }, [walletId]);
+          return {
+            key: String(record.id ?? record.reference_id ?? index),
+            date: record.created_date
+              ? dayjs(record.created_date).format("M/D/YYYY h:mm:ss A")
+              : "-",
+            reference,
+            type: record.transaction_type
+              ? record.transaction_type.replace("_", " ")
+              : "-",
+            amount: normalizedAmount,
+            status: "Completed",
+          };
+        });
+
+        setPaymentHistory(mapped);
+        setHistoryTotal(data?.count ?? 0);
+      } catch (error) {
+        handleApiError(error, "Failed to load payment history.");
+      } finally {
+        setIsHistoryLoading(false);
+      }
+    },
+    [walletId],
+  );
 
   useEffect(() => {
     fetchWalletId();
@@ -214,7 +216,6 @@ const PaymentPage: React.FC = () => {
     fetchWalletBalance();
     fetchTransactions(1);
   }, [walletId, fetchTransactions, fetchWalletBalance]);
-
 
   const handlePaymentSubmit = async (values: PaymentData) => {
     if (!selectedPackage) return;
@@ -270,7 +271,6 @@ const PaymentPage: React.FC = () => {
           onPageChange={(pageNumber) => {
             setHistoryPage(pageNumber);
             fetchTransactions(pageNumber);
-            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         />
         <PaymentModal

@@ -73,6 +73,7 @@ const PaymentHistory = ({
         <Table
           dataSource={paymentHistory}
           columns={columns}
+          className="user__table"
           pagination={{
             current: currentPage,
             total,

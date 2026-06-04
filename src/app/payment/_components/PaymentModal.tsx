@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Form, Image, Input, Modal } from "antd";
 import dayjs from "dayjs";
 
@@ -28,22 +28,8 @@ const PaymentModal = ({
 }: PaymentModalProps) => {
   const [form] = Form.useForm();
   const [isOtpStep, setIsOtpStep] = useState(false);
-  const [cardBrand, setCardBrand] = useState<"visa" | "mastercard" | null>(
-    null
-  );
-
-  useEffect(() => {
-    if (!isOpen) {
-      setIsOtpStep(false);
-      setCardBrand(null);
-      form.resetFields();
-    }
-  }, [form, isOpen]);
 
   const handleClose = () => {
-    setIsOtpStep(false);
-    setCardBrand(null);
-    form.resetFields();
     onClose();
   };
 
@@ -56,55 +42,21 @@ const PaymentModal = ({
     const { otp, ...paymentValues } = values;
     onSubmit(paymentValues as PaymentData);
     form.resetFields(["otp"]);
-    setCardBrand(null);
   };
 
-  const detectCardBrand = (value: string) => {
-    const digits = value.replace(/\D/g, "");
-    if (!digits) {
-      return null;
-    }
-
-    if (digits.startsWith("4")) {
-      return "visa";
-    }
-
-    if (digits.length >= 2) {
-      const prefix2 = Number(digits.slice(0, 2));
-      if (prefix2 >= 51 && prefix2 <= 55) {
-        return "mastercard";
-      }
-    }
-
-    if (digits.length >= 4) {
-      const prefix4 = Number(digits.slice(0, 4));
-      if (prefix4 >= 2221 && prefix4 <= 2720) {
-        return "mastercard";
-      }
-    }
-
-    return null;
-  };
-
-  const handleCardNumberChange = useCallback(
-    (value: string) => {
-      const nextBrand = detectCardBrand(value);
-      setCardBrand((prevBrand) =>
-        prevBrand === nextBrand ? prevBrand : nextBrand
-      );
-    },
-    []
-  );
 
   return (
     <Modal
       title={`Checkout - ${selectedPackage?.name}`}
       open={isOpen}
       onCancel={handleClose}
+      afterClose={() => {
+        setIsOtpStep(false);
+        form.resetFields();
+      }}
       footer={null}
       className="payment-modal"
       centered
-      forceRender
     >
       <Form
         form={form}
@@ -143,31 +95,16 @@ const PaymentModal = ({
                 placeholder="1234 5678 1234 5678"
                 maxLength={16}
                 className="payment-modal__card-input"
-                onChange={(e) => {
-                  handleCardNumberChange(e.target.value);
-                }}
                 suffix={
                   <span className="payment-modal__card-logo-wrapper">
-                    <span
-                      className={`payment-modal__card-logo${
-                        cardBrand === "visa"
-                          ? ""
-                          : " payment-modal__card-logo--hidden"
-                      }`}
-                    >
+                    <span className="payment-modal__card-logo">
                       <Image
                         preview={false}
                         src={IMAGES.visa_logo}
                         className="payment-modal__card-logo-image"
                       />
                     </span>
-                    <span
-                      className={`payment-modal__card-logo${
-                        cardBrand === "mastercard"
-                          ? ""
-                          : " payment-modal__card-logo--hidden"
-                      }`}
-                    >
+                    <span className="payment-modal__card-logo">
                       <Image
                         preview={false}
                         src={IMAGES.mastercard_logo}
@@ -196,9 +133,9 @@ const PaymentModal = ({
                         return Promise.resolve();
                       }
                       const [month, year] = value.split("/");
-                      const expiryDate = dayjs(
-                        `20${year}-${month}-01`,
-                      ).endOf("month");
+                      const expiryDate = dayjs(`20${year}-${month}-01`).endOf(
+                        "month",
+                      );
                       if (expiryDate.isBefore(dayjs(), "month")) {
                         return Promise.reject(new Error("Card expired"));
                       }

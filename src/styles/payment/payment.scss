@@ -16,7 +16,7 @@
       font-size: to-rem(32px);
       margin-bottom: to-rem(8px);
     }
-    
+
     &-subtitle {
       color: $secondary-text-color;
       font-size: to-rem(16px);
@@ -30,7 +30,7 @@
     text-align: center;
     box-shadow: 0 to-rem(8px) to-rem(32px) rgba(0, 188, 125, 0.2);
     margin-bottom: to-rem(48px);
-    
+
     &-icon {
       width: to-rem(70px);
       height: to-rem(70px);
@@ -67,17 +67,17 @@
       font-size: to-rem(20px);
       margin-bottom: to-rem(24px);
     }
-    
+
     &-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: to-rem(24px);
       margin-bottom: to-rem(32px);
-      
+
       @media (max-width: 992px) {
         grid-template-columns: repeat(2, 1fr);
       }
-      
+
       @media (max-width: 576px) {
         grid-template-columns: 1fr;
       }
@@ -142,7 +142,7 @@
       font-weight: 600;
       margin-bottom: to-rem(4px);
     }
-    
+
     &-tokens-label {
       color: $secondary-text-color;
       font-size: to-rem(14px);
@@ -230,12 +230,6 @@
     }
 
     &-table {
-      width: 100%;
-      overflow-x: auto;
-
-      .ant-table {
-        min-width: to-rem(600px);
-      }
 
       .ant-typography,
       .ant-typography strong {
@@ -252,18 +246,18 @@
     border-radius: to-rem(16px);
     padding: to-rem(32px) !important;
   }
-  
+
   .ant-modal-header {
     background: transparent;
     margin-bottom: to-rem(24px);
   }
-  
+
   .ant-modal-title {
     color: $text-color !important;
     font-size: to-rem(20px);
     font-weight: 600;
   }
-  
+
   .ant-modal-close {
     color: $text-color !important;
   }
@@ -306,6 +300,7 @@
     &--hidden {
       opacity: 0;
       visibility: hidden;
+      display: none;
     }
   }
 
