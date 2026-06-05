@@ -2,17 +2,17 @@
 import '../../styles/recommend/recommend.scss';
 
 import React, { useState } from "react";
-import { Button, Form, Image, Input, Modal, Select, Space, message } from "antd";
+import { Button, Form, Image, Input, message, Modal, Select, Space } from "antd";
 import { FileTextOutlined, FireOutlined, SettingOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { TagOutlined } from "@ant-design/icons";
-import LayoutSection from "../_components/layout/LayoutSection";
-import { 
-  recommend, 
+
+import {
+  recommend,
   RecommendParams,
   RecommendResponse,
-  ApiErrorResponse,
-  ValidationErrorResponse,
 } from "@/services/api/recommend";
+
+import LayoutSection from "../_components/layout/LayoutSection";
 
 const { TextArea } = Input;
 
@@ -75,7 +75,6 @@ const RecommendPage: React.FC = () => {
   const [selectedDietary, setSelectedDietary] = useState<string[]>(["None"]);
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<RecommendationResult | null>(null);
-  const [submittedValues, setSubmittedValues] = useState<any>({});
   const [notesInput, setNotesInput] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -155,7 +154,6 @@ const RecommendPage: React.FC = () => {
       // 获取表单值
       const currentValues = form.getFieldsValue();
       const notesValue = notesInput || "";
-      setSubmittedValues({ ...currentValues, notes: notesValue });
 
       // 组装 API 参数
       const apiParams: RecommendParams = {
@@ -202,28 +200,28 @@ const RecommendPage: React.FC = () => {
       <div className="recommend-form-card">
         <Form form={form} layout="vertical" className="recommend-form">
           {/* Cuisine Type */}
-          <Form.Item 
-            className="form-item" 
-            name="cuisine" 
+          <Form.Item
+            className="form-item"
+            name="cuisine"
             initialValue="any"
             label={<div className="form-label">Cuisine Type</div>}
           >
-            <Select 
-              options={cuisineOptions} 
+            <Select
+              options={cuisineOptions}
               className="recommend-select"
               classNames={{ popup: { root: "recommend-select-dropdown" } }}
             />
           </Form.Item>
 
           {/* Meal Type */}
-          <Form.Item 
-            className="form-item" 
-            name="meal" 
+          <Form.Item
+            className="form-item"
+            name="meal"
             initialValue="any"
             label={<div className="form-label">Meal Type</div>}
           >
-            <Select 
-              options={mealOptions} 
+            <Select
+              options={mealOptions}
               className="recommend-select"
               classNames={{ popup: { root: "recommend-select-dropdown" } }}
             />
@@ -236,9 +234,8 @@ const RecommendPage: React.FC = () => {
               {dietaryOptions.map((option) => (
                 <div
                   key={option}
-                  className={`dietary-tag ${
-                    selectedDietary.includes(option) ? "dietary-tag--active" : ""
-                  }`}
+                  className={`dietary-tag ${selectedDietary.includes(option) ? "dietary-tag--active" : ""
+                    }`}
                   onClick={() => handleDietaryClick(option)}
                 >
                   {option}
@@ -248,33 +245,33 @@ const RecommendPage: React.FC = () => {
           </Form.Item>
 
           {/* Style Type */}
-          <Form.Item 
-            className="form-item" 
-            name="mood" 
+          <Form.Item
+            className="form-item"
+            name="mood"
             initialValue="any"
             label={<div className="form-label">Style Type</div>}
           >
-            <Select 
-              options={moodOptions} 
+            <Select
+              options={moodOptions}
               className="recommend-select"
               classNames={{ popup: { root: "recommend-select-dropdown" } }}
             />
           </Form.Item>
 
           {/* Additional Notes */}
-<div className="form-item">
-  <div className="form-label">Additional Notes</div>
-  <TextArea
-    placeholder="Any specific preferences, allergies, or ingredients you'd like to include/avoid..."
-    rows={4}
-    className="recommend-textarea"
-    value={notesInput}
-    onChange={(e) => setNotesInput(e.target.value)}
-  />
-  <div className="form-hint">
-    Example: &quot;No seafood&quot;, &quot;Extra spicy&quot;, &quot;Low carb options&quot;
-  </div>
-</div>
+          <div className="form-item">
+            <div className="form-label">Additional Notes</div>
+            <TextArea
+              placeholder="Any specific preferences, allergies, or ingredients you'd like to include/avoid..."
+              rows={4}
+              className="recommend-textarea"
+              value={notesInput}
+              onChange={(e) => setNotesInput(e.target.value)}
+            />
+            <div className="form-hint">
+              Example: &quot;No seafood&quot;, &quot;Extra spicy&quot;, &quot;Low carb options&quot;
+            </div>
+          </div>
 
           {/* Generate Button */}
           <Button
@@ -285,11 +282,11 @@ const RecommendPage: React.FC = () => {
             disabled={loading}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-              <path d="M5 3v4"/>
-              <path d="M19 17v4"/>
-              <path d="M3 5h4"/>
-              <path d="M17 19h4"/>
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+              <path d="M5 3v4" />
+              <path d="M19 17v4" />
+              <path d="M3 5h4" />
+              <path d="M17 19h4" />
             </svg>
             Generate Recommendation (1 Token)
           </Button>
