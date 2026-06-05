@@ -268,28 +268,56 @@
   }
 }
 
-.result-card {
-  max-width: to-rem(720px);
-  margin: to-rem(32px) auto 0;
-  background-color: $secondary;
-  border-radius: to-rem(16px);
-  overflow: hidden;
-  border: 1px solid rgba($white, 0.06);
-
-  @media (max-width: 430px) {
-    margin: to-rem(24px) to-rem(12px) 0;
-    border-radius: to-rem(12px);
+/* Modal Styles */
+.recommend-modal {
+  .ant-modal-content {
+    background-color: $secondary !important;
+    border-radius: to-rem(16px) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    border: 1px solid rgba($white, 0.06) !important;
+    max-height: calc(100vh - to-rem(120px)) !important;
   }
+
+  .ant-modal-body {
+    padding: 0 !important;
+    max-height: calc(100vh - to-rem(120px)) !important;
+    overflow-y: auto !important;
+  }
+
+  .ant-modal-close {
+    top: to-rem(16px) !important;
+    right: to-rem(16px) !important;
+    color: rgba($white, 0.7) !important;
+    background: rgba($black, 0.4) !important;
+    border-radius: 50% !important;
+    width: to-rem(32px) !important;
+    height: to-rem(32px) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: all 0.25s ease;
+
+    &:hover {
+      color: $white !important;
+      background: rgba($black, 0.6) !important;
+    }
+  }
+}
+
+.result-card {
+  width: 100%;
 }
 
 .result-image-wrapper {
   position: relative;
   width: 100%;
-  height: to-rem(320px);
+  height: to-rem(220px);
   overflow: hidden;
 
   @media (max-width: 430px) {
-    height: to-rem(220px);
+    height: to-rem(180px);
   }
 }
 
@@ -304,23 +332,23 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: to-rem(24px);
+  padding: to-rem(20px);
   background: linear-gradient(to top, rgba($black, 0.8) 0%, transparent 100%);
 
   @media (max-width: 430px) {
-    padding: to-rem(16px);
+    padding: to-rem(14px);
   }
 }
 
 .result-name {
-  font-size: to-rem(32px);
+  font-size: to-rem(26px);
   font-weight: 400;
   color: $white;
   font-family: "Muli", Arial, Helvetica, sans-serif;
-  margin-bottom: to-rem(8px);
+  margin-bottom: to-rem(6px);
 
   @media (max-width: 430px) {
-    font-size: to-rem(22px);
+    font-size: to-rem(20px);
   }
 }
 
@@ -329,16 +357,16 @@
   align-items: center;
   gap: to-rem(8px);
   color: $primary;
-  font-size: to-rem(14px);
+  font-size: to-rem(13px);
   font-weight: 500;
   font-family: "Muli", Arial, Helvetica, sans-serif;
 }
 
 .result-content {
-  padding: to-rem(24px);
+  padding: to-rem(20px);
 
   @media (max-width: 430px) {
-    padding: to-rem(16px);
+    padding: to-rem(14px);
   }
 }
 
@@ -347,18 +375,18 @@
   align-items: center;
   gap: to-rem(8px);
   color: $primary;
-  font-size: to-rem(15px);
+  font-size: to-rem(14px);
   font-weight: 500;
   font-family: "Muli", Arial, Helvetica, sans-serif;
-  margin-bottom: to-rem(8px);
+  margin-bottom: to-rem(6px);
 
   @media (max-width: 430px) {
-    font-size: to-rem(13px);
+    font-size: to-rem(12px);
   }
 }
 
 .result-section {
-  margin-bottom: to-rem(8px);
+  margin-bottom: to-rem(6px);
 
   &:last-child {
     margin-bottom: 0;
@@ -366,26 +394,26 @@
 }
 
 .result-section-title {
-  font-size: to-rem(15px);
+  font-size: to-rem(14px);
   font-weight: 300;
   font-family: "Muli", Arial, Helvetica, sans-serif;
   color: rgba($white, 0.9);
-  margin-bottom: to-rem(12px);
+  margin-bottom: to-rem(10px);
 
   @media (max-width: 430px) {
-    font-size: to-rem(14px);
+    font-size: to-rem(13px);
     margin-bottom: to-rem(8px);
   }
 }
 
 .result-description {
-  font-size: to-rem(14px);
+  font-size: to-rem(13px);
   font-family: "Muli", Arial, Helvetica, sans-serif;
   color: rgba($white, 0.65);
   line-height: 1.7;
 
   @media (max-width: 430px) {
-    font-size: to-rem(13px);
+    font-size: to-rem(12px);
     line-height: 1.6;
   }
 }
@@ -393,33 +421,33 @@
 .result-ingredients {
   display: flex;
   flex-wrap: wrap;
-  gap: to-rem(8px);
+  gap: to-rem(6px);
 }
 
 .result-ingredient-tag {
-  padding: to-rem(6px) to-rem(14px);
+  padding: to-rem(5px) to-rem(12px);
   border-radius: to-rem(6px);
   background-color: rgba($primary, 0.08);
   color: $primary;
-  font-size: to-rem(13px);
+  font-size: to-rem(12px);
   font-weight: 500;
   font-family: "Muli", Arial, Helvetica, sans-serif;
   border: 1px solid rgba($primary, 0.15);
 
   @media (max-width: 430px) {
     padding: to-rem(4px) to-rem(10px);
-    font-size: to-rem(12px);
+    font-size: to-rem(11px);
   }
 }
 
 .preferences-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: to-rem(10px);
+  gap: to-rem(8px);
 
   @media (max-width: 430px) {
     grid-template-columns: 1fr;
-    gap: to-rem(8px);
+    gap: to-rem(6px);
   }
 }
 
@@ -427,25 +455,25 @@
   display: flex;
   align-items: center;
   gap: to-rem(8px);
-  padding: to-rem(10px) to-rem(14px);
+  padding: to-rem(8px) to-rem(12px);
   background-color: rgba($white, 0.03);
   border-radius: to-rem(8px);
   border: 1px solid rgba($white, 0.06);
 
   @media (max-width: 430px) {
-    padding: to-rem(8px) to-rem(12px);
+    padding: to-rem(6px) to-rem(10px);
   }
 }
 
 .preference-label {
-  font-size: to-rem(13px);
+  font-size: to-rem(12px);
   color: rgba($white, 0.45);
   font-weight: 400;
   font-family: "Muli", Arial, Helvetica, sans-serif;
 }
 
 .preference-value {
-  font-size: to-rem(13px);
+  font-size: to-rem(12px);
   color: rgba($white, 0.85);
   font-weight: 500;
   font-family: "Muli", Arial, Helvetica, sans-serif;
@@ -458,9 +486,9 @@
 .result-divider {
   height: 1px;
   background-color: rgba($white, 0.08);
-  margin: to-rem(20px) 0;
+  margin: to-rem(16px) 0;
 
   @media (max-width: 430px) {
-    margin: to-rem(16px) 0;
+    margin: to-rem(12px) 0;
   }
 }
