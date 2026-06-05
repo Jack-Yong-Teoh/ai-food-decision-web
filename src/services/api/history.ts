@@ -77,3 +77,12 @@ export const getFoods = async (params: GetFoodsParams): Promise<GetFoodsResponse
   const res = await http.post(ENDPOINT.history, params);
   return res?.data;
 };
+
+/**
+ * 获取单个食物详情
+ * GET /api/food/{food_id}
+ */
+export const getFood = async (foodId: number): Promise<FoodItem> => {
+  const res = await http.get(ENDPOINT.getFood.replace("%s", String(foodId)));
+  return res?.data;
+};
