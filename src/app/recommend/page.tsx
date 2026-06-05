@@ -2,7 +2,7 @@
 import '../../styles/recommend/recommend.scss';
 
 import React, { useState } from "react";
-import { Button, Form, Image, Input, Select, Space, message } from "antd";
+import { Button, Form, Image, Input, Modal, Select, Space, message } from "antd";
 import { FileTextOutlined, FireOutlined, SettingOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { TagOutlined } from "@ant-design/icons";
 import LayoutSection from "../_components/layout/LayoutSection";
@@ -77,6 +77,7 @@ const RecommendPage: React.FC = () => {
   const [result, setResult] = useState<RecommendationResult | null>(null);
   const [submittedValues, setSubmittedValues] = useState<any>({});
   const [notesInput, setNotesInput] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleDietaryClick = (value: string) => {
     setSelectedDietary((prev) => {
@@ -172,6 +173,7 @@ const RecommendPage: React.FC = () => {
       // 映射并展示结果
       const mappedResult = mapApiToResult(apiResult, notesValue);
       setResult(mappedResult);
+      setIsModalOpen(true);
       message.success("Recommendation generated successfully!");
 
     } catch (error: any) {
@@ -181,6 +183,10 @@ const RecommendPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
 
@@ -290,75 +296,85 @@ const RecommendPage: React.FC = () => {
         </Form>
       </div>
 
-      {/* Result Card */}
-      {result && (
-        <div className="result-card">
-          <div className="result-image-wrapper">
-            <Image
-              src={result.imageUrl}
-              alt={result.name}
-              className="result-image"
-              preview={false}
-              fallback="/assets/food-fallback.webp"
-              wrapperStyle={{ width: '100%', height: '100%' }}
-            />
-            <div className="result-image-overlay">
-              <div className="result-name">{result.name}</div>
-              <div className="result-cuisine"><TagOutlined style={{ marginRight: '6px' }} />{result.cuisine}</div>
-            </div>
-          </div>
-
-          <div className="result-content">
-            <div className="result-calories">
-              <FireOutlined style={{ marginRight: '6px' }} />
-              {result.calories} cal
-            </div>
-
-            <div className="result-divider" />
-
-            <div className="result-section">
-              <div className="result-section-title">
-                <FileTextOutlined style={{ marginRight: '8px' }} />
-                Description
+      {/* Result Modal */}
+      <Modal
+        open={isModalOpen}
+        onCancel={handleModalClose}
+        footer={null}
+        width={520}
+        className="recommend-modal"
+        centered
+        destroyOnHidden
+      >
+        {result && (
+          <div className="result-card">
+            <div className="result-image-wrapper">
+              <Image
+                src={result.imageUrl}
+                alt={result.name}
+                className="result-image"
+                preview={false}
+                fallback="/assets/food-fallback.webp"
+                wrapperStyle={{ width: '100%', height: '100%' }}
+              />
+              <div className="result-image-overlay">
+                <div className="result-name">{result.name}</div>
+                <div className="result-cuisine"><TagOutlined style={{ marginRight: '6px' }} />{result.cuisine}</div>
               </div>
-              <div className="result-description">{result.description}</div>
             </div>
 
-            <div className="result-divider" />
-
-            <div className="result-section">
-              <div className="result-section-title">
-                <UnorderedListOutlined style={{ marginRight: '8px' }} />
-                Main Ingredients
+            <div className="result-content">
+              <div className="result-calories">
+                <FireOutlined style={{ marginRight: '6px' }} />
+                {result.calories} cal
               </div>
-              <div className="result-ingredients">
-                {result.ingredients.map((ingredient) => (
-                  <div key={ingredient} className="result-ingredient-tag">
-                    {ingredient}
+
+              <div className="result-divider" />
+
+              <div className="result-section">
+                <div className="result-section-title">
+                  <FileTextOutlined style={{ marginRight: '8px' }} />
+                  Description
+                </div>
+                <div className="result-description">{result.description}</div>
+              </div>
+
+              <div className="result-divider" />
+
+              <div className="result-section">
+                <div className="result-section-title">
+                  <UnorderedListOutlined style={{ marginRight: '8px' }} />
+                  Main Ingredients
+                </div>
+                <div className="result-ingredients">
+                  {result.ingredients.map((ingredient) => (
+                    <div key={ingredient} className="result-ingredient-tag">
+                      {ingredient}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="result-divider" />
+
+              <div className="result-section">
+                <div className="result-section-title">
+                  <SettingOutlined style={{ marginRight: '8px' }} />
+                  Your Preferences
+                </div>
+                <div className="preferences-grid">
+                  <div className="preference-item preference-item--full">
+                    <span className="preference-label">Notes:</span>
+                    <span className="preference-value">
+                      {result.notes || "-"}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="result-divider" />
-
-            <div className="result-section">
-              <div className="result-section-title">
-                <SettingOutlined style={{ marginRight: '8px' }} />
-                Your Preferences
-              </div>
-              <div className="preferences-grid">
-                <div className="preference-item preference-item--full">
-                  <span className="preference-label">Notes:</span>
-                  <span className="preference-value">
-                    {result.notes || "-"}
-                  </span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </LayoutSection>
   );
 };
