@@ -1,28 +1,31 @@
 "use client";
 import '../../styles/history/history.scss';
+
 import React, { useEffect, useState } from "react";
 import {
-  Typography,
-  Image,
-  Spin,
+  Divider,
   Empty,
+  Image,
   message,
   Modal,
   Pagination,
+  Spin,
   Tag,
-  Divider,
+  Typography,
 } from "antd";
 import {
-  ClockCircleOutlined,
   CalendarOutlined,
-  ShopOutlined,
-  FireOutlined,
-  UnorderedListOutlined,
-  FileTextOutlined,
+  ClockCircleOutlined,
   CloseOutlined,
+  FileTextOutlined,
+  FireOutlined,
+  ShopOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
+
+import { FoodItem, getFood, getFoods, GetFoodsResponse } from "@/services/api/history";
+
 import LayoutSection from "../_components/layout/LayoutSection";
-import { getFoods, getFood, GetFoodsResponse, FoodItem } from "@/services/api/history";
 
 const { Title, Text } = Typography;
 
@@ -132,6 +135,7 @@ const HistoryPage: React.FC = () => {
 
   useEffect(() => {
     fetchHistory(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePageChange = (page: number) => {
