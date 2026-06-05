@@ -24,4 +24,7 @@ export const ENDPOINT = {
   //history
   history: `/foods`,
   getFood: `/food/%s`,
+  //transaction
+  createTransaction: `/transaction`,
+  lazyloadTransactions: `/transactions`,
 };
