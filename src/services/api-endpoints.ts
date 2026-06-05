@@ -20,6 +20,11 @@ export const ENDPOINT = {
 
   //recommend
   recommend: `/food`,
+
+  //history
+  history: `/foods`,
+  getFood: `/food/%s`,
+
   //transaction
   createTransaction: `/transaction`,
   lazyloadTransactions: `/transactions`,
