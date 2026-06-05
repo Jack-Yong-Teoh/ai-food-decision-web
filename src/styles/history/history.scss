@@ -7,6 +7,10 @@
   max-width: to-rem(900px);
   margin: 0 auto;
 
+  @media (max-width: 430px) {
+    padding: to-rem(16px);
+  }
+
   &__loading {
     display: flex;
     align-items: center;
@@ -45,11 +49,19 @@
       font-weight: 500;
       color: $white !important;
       font-family: "Muli", Arial, Helvetica, sans-serif;
+
+      @media (max-width: 430px) {
+        font-size: to-rem(24px) !important;
+      }
     }
 
     &__subtitle {
       font-size: to-rem(14px);
       font-family: "Muli", Arial, Helvetica, sans-serif;
+
+      @media (max-width: 430px) {
+        font-size: to-rem(13px);
+      }
     }
   }
 
@@ -57,6 +69,10 @@
     display: flex;
     align-items: flex-start;
     margin-bottom: to-rem(24px);
+
+    @media (max-width: 430px) {
+      margin-bottom: to-rem(16px);
+    }
 
     &__info {
       display: flex;
@@ -70,11 +86,19 @@
       margin: 0 !important;
       font-size: to-rem(24px) !important;
       font-weight: 400 !important;
+
+      @media (max-width: 430px) {
+        font-size: to-rem(20px) !important;
+      }
     }
 
     &__count {
       font-size: to-rem(14px);
       font-family: "Muli", Arial, Helvetica, sans-serif;
+
+      @media (max-width: 430px) {
+        font-size: to-rem(13px);
+      }
     }
   }
 
@@ -82,6 +106,10 @@
     display: flex;
     flex-direction: column;
     gap: to-rem(16px);
+
+    @media (max-width: 430px) {
+      gap: to-rem(12px);
+    }
   }
 
   &__card {
@@ -90,23 +118,61 @@
     border-radius: to-rem(12px);
     overflow: hidden;
     border: 1px solid rgba($secondary-3, 0.3);
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    &:hover {
+      border-color: rgba($primary, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 to-rem(4px) to-rem(16px) rgba($black, 0.2);
+    }
+
+    @media (max-width: 430px) {
+      flex-direction: column;
+      border-radius: to-rem(10px);
+    }
 
     &__image-wrapper {
       flex-shrink: 0;
       width: to-rem(200px);
       height: to-rem(200px);
       overflow: hidden;
+      position: relative;
+
+      @media (max-width: 768px) {
+        width: to-rem(160px);
+        height: to-rem(160px);
+      }
 
       @media (max-width: 430px) {
-        width: to-rem(140px);
-        height: to-rem(140px);
+        width: 100%;
+        height: to-rem(180px);
+      }
+
+      // 确保 antd Image wrapper 占满
+      .ant-image {
+        width: 100% !important;
+        height: 100% !important;
+        display: block !important;
+      }
+
+      .ant-image-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
       }
     }
 
     &__image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      display: block !important;
+      transition: transform 0.3s ease;
+
+      .history__card:hover & {
+        transform: scale(1.05);
+      }
     }
 
     &__content {
@@ -115,6 +181,16 @@
       padding: to-rem(16px) to-rem(20px);
       flex: 1;
       gap: to-rem(8px);
+      min-width: 0;
+
+      @media (max-width: 768px) {
+        padding: to-rem(12px) to-rem(16px);
+        gap: to-rem(6px);
+      }
+
+      @media (max-width: 430px) {
+        padding: to-rem(12px) to-rem(14px);
+      }
     }
 
     &__header {
@@ -122,6 +198,11 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: to-rem(12px);
+
+      @media (max-width: 430px) {
+        flex-direction: column;
+        gap: to-rem(4px);
+      }
     }
 
     &__title {
@@ -129,6 +210,15 @@
       font-weight: 500;
       font-family: "Muli", Arial, Helvetica, sans-serif;
       color: $white !important;
+      word-break: break-word;
+
+      @media (max-width: 768px) {
+        font-size: to-rem(18px) !important;
+      }
+
+      @media (max-width: 430px) {
+        font-size: to-rem(16px) !important;
+      }
     }
 
     &__date {
@@ -145,6 +235,10 @@
       &-text {
         font-size: to-rem(13px);
         font-family: "Muli", Arial, Helvetica, sans-serif;
+
+        @media (max-width: 430px) {
+          font-size: to-rem(12px);
+        }
       }
     }
 
@@ -155,13 +249,17 @@
 
       &-icon {
         font-size: to-rem(14px);
-        color: $secondary_4;
+        color: $secondary_4 !important;
       }
 
       &-text {
         font-size: to-rem(13px);
         font-family: "Muli", Arial, Helvetica, sans-serif;
-        color:  $secondary_4 !important;
+        color: $secondary_4 !important;
+
+        @media (max-width: 430px) {
+          font-size: to-rem(12px);
+        }
       }
     }
 
@@ -173,6 +271,11 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+
+      @media (max-width: 430px) {
+        font-size: to-rem(13px);
+        -webkit-line-clamp: 3;
+      }
     }
 
     &__calories {
@@ -183,14 +286,311 @@
 
       &-icon {
         font-size: to-rem(14px);
-        color: $secondary_4;
+        color: $secondary_4 !important;
       }
 
       &-text {
         font-size: to-rem(14px);
         font-family: "Muli", Arial, Helvetica, sans-serif;
         color: $secondary_4 !important;
+
+        @media (max-width: 430px) {
+          font-size: to-rem(13px);
+        }
       }
     }
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: to-rem(32px);
+    padding-bottom: to-rem(16px);
+
+    @media (max-width: 430px) {
+      margin-top: to-rem(24px);
+    }
+
+    &__component {
+      .ant-pagination-item {
+        background: rgba($white, 0.04) !important;
+        border: 1px solid rgba($white, 0.08) !important;
+        border-radius: to-rem(8px) !important;
+
+        a {
+          color: rgba($white, 0.7) !important;
+          font-family: "Muli", Arial, Helvetica, sans-serif;
+        }
+
+        &:hover {
+          border-color: rgba($primary, 0.5) !important;
+
+          a {
+            color: $primary !important;
+          }
+        }
+      }
+
+      .ant-pagination-item-active {
+        background: rgba($primary, 0.12) !important;
+        border-color: $primary !important;
+
+        a {
+          color: $primary !important;
+          font-weight: 500 !important;
+        }
+      }
+
+      .ant-pagination-prev,
+      .ant-pagination-next {
+        .ant-pagination-item-link {
+          background: rgba($white, 0.04) !important;
+          border: 1px solid rgba($white, 0.08) !important;
+          border-radius: to-rem(8px) !important;
+          color: rgba($white, 0.6) !important;
+
+          &:hover {
+            border-color: rgba($primary, 0.5) !important;
+            color: $primary !important;
+          }
+        }
+      }
+
+      .ant-pagination-disabled {
+        .ant-pagination-item-link {
+          opacity: 0.4 !important;
+          cursor: not-allowed !important;
+
+          &:hover {
+            border-color: rgba($white, 0.08) !important;
+            color: rgba($white, 0.6) !important;
+          }
+        }
+      }
+
+      .ant-pagination-jump-prev,
+      .ant-pagination-jump-next {
+        .ant-pagination-item-link {
+          color: rgba($white, 0.5) !important;
+        }
+      }
+    }
+  }
+}
+
+/* Detail Modal Styles */
+.history-detail-modal {
+  .ant-modal-content {
+    background-color: $secondary !important;
+    border-radius: to-rem(16px) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    border: 1px solid rgba($white, 0.06) !important;
+    max-height: calc(100vh - to-rem(120px)) !important;
+  }
+
+  .ant-modal-body {
+    padding: 0 !important;
+    max-height: calc(100vh - to-rem(120px)) !important;
+    overflow-y: auto !important;
+  }
+
+  .ant-modal-close {
+    top: to-rem(16px) !important;
+    right: to-rem(16px) !important;
+    color: rgba($white, 0.7) !important;
+    background: rgba($black, 0.4) !important;
+    border-radius: 50% !important;
+    width: to-rem(32px) !important;
+    height: to-rem(32px) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: all 0.25s ease;
+
+    &:hover {
+      color: $white !important;
+      background: rgba($black, 0.6) !important;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: to-rem(300px);
+  }
+
+  &__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: to-rem(220px);
+    overflow: hidden;
+
+    @media (max-width: 430px) {
+      height: to-rem(180px);
+    }
+
+    // 确保 antd Image wrapper 占满
+    .ant-image {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+    }
+
+    .ant-image-img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+    }
+  }
+
+  &__image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  &__image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: to-rem(20px);
+    background: linear-gradient(to top, rgba($black, 0.8) 0%, transparent 100%);
+
+    @media (max-width: 430px) {
+      padding: to-rem(14px);
+    }
+  }
+
+  &__name {
+    font-size: to-rem(26px);
+    font-weight: 400;
+    color: $white;
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+    margin-bottom: to-rem(6px);
+
+    @media (max-width: 430px) {
+      font-size: to-rem(20px);
+    }
+  }
+
+  &__cuisine {
+    display: flex;
+    align-items: center;
+    gap: to-rem(8px);
+    color: $primary;
+    font-size: to-rem(13px);
+    font-weight: 500;
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+  }
+
+  &__body {
+    padding: to-rem(20px);
+
+    @media (max-width: 430px) {
+      padding: to-rem(14px);
+    }
+  }
+
+  &__calories {
+    display: flex;
+    align-items: center;
+    gap: to-rem(8px);
+    color: $primary;
+    font-size: to-rem(14px);
+    font-weight: 500;
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+    margin-bottom: to-rem(6px);
+
+    @media (max-width: 430px) {
+      font-size: to-rem(13px);
+    }
+  }
+
+  &__divider {
+    background-color: rgba($white, 0.08) !important;
+    margin: to-rem(16px) 0 !important;
+
+    @media (max-width: 430px) {
+      margin: to-rem(12px) 0 !important;
+    }
+  }
+
+  &__section {
+    margin-bottom: to-rem(6px);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__section-title {
+    font-size: to-rem(14px);
+    font-weight: 300;
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+    color: rgba($white, 0.9);
+    margin-bottom: to-rem(10px);
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 430px) {
+      font-size: to-rem(13px);
+      margin-bottom: to-rem(8px);
+    }
+  }
+
+  &__section-content {
+    font-size: to-rem(13px);
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+    color: rgba($white, 0.65);
+    line-height: 1.7;
+
+    @media (max-width: 430px) {
+      font-size: to-rem(12px);
+      line-height: 1.6;
+    }
+  }
+
+  &__ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: to-rem(6px);
+  }
+
+  &__ingredient-tag {
+    padding: to-rem(5px) to-rem(12px) !important;
+    border-radius: to-rem(6px) !important;
+    background-color: rgba($primary, 0.08) !important;
+    color: $primary !important;
+    font-size: to-rem(12px) !important;
+    font-weight: 500 !important;
+    font-family: "Muli", Arial, Helvetica, sans-serif !important;
+    border: 1px solid rgba($primary, 0.15) !important;
+    margin: 0 !important;
+
+    @media (max-width: 430px) {
+      padding: to-rem(4px) to-rem(10px) !important;
+      font-size: to-rem(11px) !important;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: to-rem(6px);
+    color: rgba($white, 0.45);
+    font-size: to-rem(12px);
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+    margin-top: to-rem(4px);
+  }
+
+  &__meta-text {
+    color: rgba($white, 0.45) !important;
+    font-size: to-rem(12px) !important;
+    font-family: "Muli", Arial, Helvetica, sans-serif !important;
   }
 }
