@@ -20,4 +20,14 @@ export const ENDPOINT = {
 
   //lucky pick
   getLuckyPicks: `/lucky-picks`,
+  //recommend
+  recommend: `/food`,
+
+  //history
+  history: `/foods`,
+  getFood: `/food/%s`,
+
+  //transaction
+  createTransaction: `/transaction`,
+  lazyloadTransactions: `/transactions`,
 };
