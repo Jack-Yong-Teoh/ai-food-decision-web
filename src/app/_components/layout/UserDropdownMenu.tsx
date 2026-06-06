@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { type MenuProps, message } from "antd";
 import { AxiosError } from "axios";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { LogoutOutlined, SolutionOutlined, UserOutlined } from "@ant-design/icons";
 
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppDispatch } from "@/redux/hook";
@@ -49,6 +49,14 @@ export const GetUserDropdownItems = ({
         label: "Profile",
         onClick: () => {
           router.push("/profile");
+        },
+      },
+      {
+        key: "about-us",
+        icon: <SolutionOutlined />,
+        label: "About Us",
+        onClick: () => {
+          router.push("/about-us");
         },
       },
       {
