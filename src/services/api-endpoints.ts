@@ -18,6 +18,8 @@ export const ENDPOINT = {
   //wallet
   getWallet: `/wallet?wallet_id=%d`,
 
+  //lucky pick
+  getLuckyPicks: `/lucky-picks`,
   //recommend
   recommend: `/food`,
 
