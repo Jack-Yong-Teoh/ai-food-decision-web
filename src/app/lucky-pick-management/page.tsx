@@ -1,249 +1,123 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import { Button, Col, Flex, Input, message, Row, Switch, TableProps, Tag } from "antd";
-import { CloseOutlined, PlusOutlined, ReloadOutlined, SaveOutlined } from "@ant-design/icons";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Button, Col, Row, TableProps } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
+
+import { getLuckyPicks } from "@/services/api/luckyPick";
+import { SortEnum } from "@/types/general";
+import { LuckyPickData, LuckyPickTableState } from "@/types/luckyPick";
+import { handleApiError } from "@/utils/apiHelper/errorHandler";
 
 import { SearchInput } from "../_components/input/SearchInput";
 import LayoutSection from "../_components/layout/LayoutSection";
 import Table from "../_components/table/Table";
 
-interface LuckyPickFood {
-  id: number;
-  name: string;
-  isActive: boolean;
-  createdAt: string;
-}
-
-const LUCKY_PICK_STORAGE_KEY = "food-genie-lucky-pick-items";
-
-const DEFAULT_FOODS: LuckyPickFood[] = [
-  "Pizza",
-  "Sushi",
-  "Fried Rice",
-  "Sandwich",
-  "Noodles",
-  "Spring Rolls",
-  "Fish & Chips",
-  "Pho",
-  "Hot Pot",
-  "Burrito",
-  "Salad",
-  "Falafel",
-  "Dumplings",
-  "Pad Thai",
-  "Curry",
-  "Steak",
-  "BBQ Ribs",
-  "Tacos",
-  "Kebab",
-  "Fried Chicken",
-  "Pasta",
-  "Soup",
-  "Ramen",
-  "Burger",
-].map((name, index) => ({
-  id: index + 1,
-  name,
-  isActive: true,
-  createdAt: new Date(2026, 0, index + 1).toISOString(),
-}));
-
-const getStoredFoods = () => {
-  if (typeof window === "undefined") {
-    return DEFAULT_FOODS;
-  }
-
-  const storedFoods = window.localStorage.getItem(LUCKY_PICK_STORAGE_KEY);
-
-  if (!storedFoods) {
-    window.localStorage.setItem(
-      LUCKY_PICK_STORAGE_KEY,
-      JSON.stringify(DEFAULT_FOODS),
-    );
-    return DEFAULT_FOODS;
-  }
-
-  try {
-    const parsedFoods = JSON.parse(storedFoods) as LuckyPickFood[];
-    return parsedFoods.length ? parsedFoods : DEFAULT_FOODS;
-  } catch {
-    window.localStorage.setItem(
-      LUCKY_PICK_STORAGE_KEY,
-      JSON.stringify(DEFAULT_FOODS),
-    );
-    return DEFAULT_FOODS;
-  }
-};
+const DEBOUNCE_TIME = 300;
+const PAGE_SIZE = 10;
 
 const LuckyPickManagementPage: React.FC = () => {
-  const [foods, setFoods] = useState<LuckyPickFood[]>([]);
-  const [foodName, setFoodName] = useState<string>("");
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const initialRender = useRef<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [luckyPicks, setLuckyPicks] = useState<LuckyPickTableState>({
+    loading: true,
+    data: [],
+    count: 0,
+  });
 
-  const activeFoodCount = useMemo(
-    () => foods.filter((food) => food.isActive).length,
-    [foods],
-  );
+  const fetchLuckyPicks = async (pageNumber = currentPage) => {
+    setLuckyPicks((prevState) => ({ ...prevState, loading: true }));
 
-  const filteredFoods = useMemo(() => {
-    const keyword = searchValue.trim().toLowerCase();
+    try {
+      const data = await getLuckyPicks({
+        filters: [],
+        search: searchValue,
+        sort: { order_by: "id", sort_order: SortEnum.desc },
+        pagination: { limit: PAGE_SIZE, page: pageNumber },
+        export: false,
+      });
 
-    if (!keyword) {
-      return foods;
+      setLuckyPicks({
+        data: data?.data ?? [],
+        count: data?.count ?? 0,
+        loading: false,
+      });
+    } catch (error) {
+      handleApiError(error, "Error fetching lucky picks.");
+      setLuckyPicks({ data: [], count: 0, loading: false });
     }
-
-    return foods.filter((food) => food.name.toLowerCase().includes(keyword));
-  }, [foods, searchValue]);
+  };
 
   useEffect(() => {
-    setFoods(getStoredFoods());
-    setLoading(false);
+    fetchLuckyPicks();
+    initialRender.current = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const persistFoods = (nextFoods: LuckyPickFood[]) => {
-    setFoods(nextFoods);
-    window.localStorage.setItem(
-      LUCKY_PICK_STORAGE_KEY,
-      JSON.stringify(nextFoods),
-    );
-    window.dispatchEvent(new Event("lucky-pick-items-updated"));
-  };
-
-  const resetForm = () => {
-    setFoodName("");
-    setEditingId(null);
-  };
-
-  const handleSaveFood = () => {
-    const normalizedFoodName = foodName.trim();
-
-    if (!normalizedFoodName) {
-      message.warning("Please enter a food name.");
+  useEffect(() => {
+    if (initialRender.current) {
       return;
     }
 
-    const hasDuplicateFood = foods.some(
-      (food) =>
-        food.name.toLowerCase() === normalizedFoodName.toLowerCase() &&
-        food.id !== editingId,
-    );
+    const debounceTimer = setTimeout(() => {
+      setCurrentPage(1);
+      fetchLuckyPicks(1);
+    }, DEBOUNCE_TIME);
 
-    if (hasDuplicateFood) {
-      message.warning("This food already exists.");
-      return;
-    }
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue]);
 
-    if (editingId) {
-      persistFoods(
-        foods.map((food) =>
-          food.id === editingId ? { ...food, name: normalizedFoodName } : food,
-        ),
-      );
-      message.success("Food item updated.");
-      resetForm();
-      return;
-    }
-
-    persistFoods([
-      {
-        id: Date.now(),
-        name: normalizedFoodName,
-        isActive: true,
-        createdAt: new Date().toISOString(),
-      },
-      ...foods,
-    ]);
-    message.success("Food item added.");
-    resetForm();
-  };
-
-  const handleEditFood = (id: React.Key) => {
-    const food = foods.find((item) => item.id === Number(id));
-
-    if (!food) {
-      return;
-    }
-
-    setFoodName(food.name);
-    setEditingId(food.id);
-  };
-
-  const handleDeleteFood = (id: React.Key) => {
-    const nextFoods = foods.filter((food) => food.id !== Number(id));
-    persistFoods(nextFoods);
-    message.success("Food item deleted.");
-
-    if (editingId === Number(id)) {
-      resetForm();
-    }
-  };
-
-  const handleToggleFood = (id: number, checked: boolean) => {
-    persistFoods(
-      foods.map((food) =>
-        food.id === id ? { ...food, isActive: checked } : food,
-      ),
-    );
-  };
-
-  const handleResetDefaults = () => {
-    persistFoods(DEFAULT_FOODS);
-    resetForm();
-    message.success("Default food list restored.");
-  };
-
-  const columns: TableProps<LuckyPickFood>["columns"] = useMemo(
+  const columns: TableProps<LuckyPickData>["columns"] = useMemo(
     () => [
       {
-        title: "Food Name",
-        dataIndex: "name",
-        key: "name",
+        title: "Option Name",
+        dataIndex: "option_name",
+        key: "option_name",
+        render: (optionName: string | null) => optionName || "-",
       },
       {
-        title: "Status",
-        dataIndex: "isActive",
-        key: "isActive",
-        align: "center",
-        render: (isActive: boolean) => (
-          <Tag
-            className={`lucky-pick-management__table__status ${
-              isActive ? "is-active" : "is-inactive"
-            }`}
-          >
-            {isActive ? "Active" : "Inactive"}
-          </Tag>
-        ),
-      },
-      {
-        title: "Use in Pick",
-        dataIndex: "isActive",
-        key: "toggle",
-        align: "center",
-        render: (isActive: boolean, record: LuckyPickFood) => (
-          <Switch
-            checked={isActive}
-            onChange={(checked) => handleToggleFood(record.id, checked)}
-          />
-        ),
+        title: "Description",
+        dataIndex: "description",
+        key: "description",
+        render: (description: string | null) => description || "-",
       },
       {
         title: "Created",
-        dataIndex: "createdAt",
-        key: "createdAt",
-        render: (createdAt: string) =>
-          new Intl.DateTimeFormat("en-MY", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          }).format(new Date(createdAt)),
+        dataIndex: "created_date",
+        key: "created_date",
+        render: (createdDate: string | null) =>
+          createdDate
+            ? new Intl.DateTimeFormat("en-MY", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              }).format(new Date(createdDate))
+            : "-",
+      },
+      {
+        title: "Modified",
+        dataIndex: "modified_date",
+        key: "modified_date",
+        render: (modifiedDate: string | null) =>
+          modifiedDate
+            ? new Intl.DateTimeFormat("en-MY", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              }).format(new Date(modifiedDate))
+            : "-",
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [foods],
+    [],
   );
+
+  const handleRefresh = () => {
+    fetchLuckyPicks();
+  };
 
   return (
     <LayoutSection>
@@ -254,58 +128,17 @@ const LuckyPickManagementPage: React.FC = () => {
               Manage Lucky Pick
             </div>
             <div className="lucky-pick-management__hero__subtitle">
-              Curate the meals that appear in the Lucky Pick random selector.
+              Review the meals returned by the Lucky Pick API.
             </div>
           </div>
           <div className="lucky-pick-management__hero__summary">
             <span className="lucky-pick-management__hero__summary__value">
-              {activeFoodCount}
+              {luckyPicks.count}
             </span>
             <span className="lucky-pick-management__hero__summary__label">
-              Active Foods
+              Total Options
             </span>
           </div>
-        </div>
-
-        <div className="lucky-pick-management__form">
-          <Row gutter={[12, 12]} align="middle">
-            <Col xs={24} md={14} lg={12}>
-              <Input
-                value={foodName}
-                onChange={(event) => setFoodName(event.target.value)}
-                onPressEnter={handleSaveFood}
-                placeholder="Food name"
-                maxLength={40}
-              />
-            </Col>
-            <Col xs={24} md={10} lg={12}>
-              <Flex gap="small" wrap="wrap">
-                <Button
-                  className="primary__button"
-                  icon={editingId ? <SaveOutlined /> : <PlusOutlined />}
-                  onClick={handleSaveFood}
-                >
-                  {editingId ? "Save" : "Add Food"}
-                </Button>
-                {editingId && (
-                  <Button
-                    className="secondary__button"
-                    icon={<CloseOutlined />}
-                    onClick={resetForm}
-                  >
-                    Cancel
-                  </Button>
-                )}
-                <Button
-                  className="secondary__button"
-                  icon={<ReloadOutlined />}
-                  onClick={handleResetDefaults}
-                >
-                  Reset
-                </Button>
-              </Flex>
-            </Col>
-          </Row>
         </div>
 
         <div className="lucky-pick-management__toolbar">
@@ -314,29 +147,43 @@ const LuckyPickManagementPage: React.FC = () => {
               <SearchInput
                 value={searchValue}
                 onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Search food"
+                placeholder="Search lucky pick"
               />
             </Col>
             <Col xs={24} md={12} lg={16}>
-              <div className="lucky-pick-management__toolbar__meta">
-                {filteredFoods.length} food items
+              <div className="lucky-pick-management__toolbar__actions">
+                <div className="lucky-pick-management__toolbar__meta">
+                  {luckyPicks.data.length} visible options
+                </div>
+                <Button
+                  className="secondary__button"
+                  icon={<ReloadOutlined />}
+                  loading={luckyPicks.loading}
+                  onClick={handleRefresh}
+                >
+                  Refresh
+                </Button>
               </div>
             </Col>
           </Row>
         </div>
 
         <Table
-          dataSource={filteredFoods}
+          dataSource={luckyPicks.data}
           columns={columns}
-          loading={loading}
+          loading={luckyPicks.loading}
           className="lucky-pick-management__table"
-          actions={["update", "delete"]}
-          onUpdate={handleEditFood}
-          onDelete={handleDeleteFood}
           pagination={{
-            pageSize: 10,
+            current: currentPage,
+            total: luckyPicks.count,
+            pageSize: PAGE_SIZE,
             showSizeChanger: false,
             showQuickJumper: true,
+            onChange: (pageNumber: number) => {
+              setCurrentPage(pageNumber);
+              fetchLuckyPicks(pageNumber);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            },
             showTotal: (total: number, range: [number, number]) =>
               `${range[0]} - ${range[1]} of ${total} items`,
           }}

@@ -1,135 +1,134 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import { Button, message } from "antd";
-import { PlayCircleOutlined, ReloadOutlined, StopOutlined } from "@ant-design/icons";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Button, Empty, message, Spin } from "antd";
+import {
+  PlayCircleOutlined,
+  ReloadOutlined,
+  StopOutlined,
+} from "@ant-design/icons";
+
+import { getLuckyPicks } from "@/services/api/luckyPick";
+import { SortEnum } from "@/types/general";
+import { LuckyPickData } from "@/types/luckyPick";
+import { handleApiError } from "@/utils/apiHelper/errorHandler";
 
 import LayoutSection from "../_components/layout/LayoutSection";
 
-interface LuckyPickFood {
-  id: number;
-  name: string;
-  isActive: boolean;
-  createdAt: string;
-}
-
-const LUCKY_PICK_STORAGE_KEY = "food-genie-lucky-pick-items";
-
-const DEFAULT_FOODS: LuckyPickFood[] = [
-  "Pizza",
-  "Sushi",
-  "Fried Rice",
-  "Sandwich",
-  "Noodles",
-  "Spring Rolls",
-  "Fish & Chips",
-  "Pho",
-  "Hot Pot",
-  "Burrito",
-  "Salad",
-  "Falafel",
-  "Dumplings",
-  "Pad Thai",
-  "Curry",
-  "Steak",
-  "BBQ Ribs",
-  "Tacos",
-  "Kebab",
-  "Fried Chicken",
-  "Pasta",
-  "Soup",
-  "Ramen",
-  "Burger",
-].map((name, index) => ({
-  id: index + 1,
-  name,
-  isActive: true,
-  createdAt: new Date(2026, 0, index + 1).toISOString(),
-}));
-
-const getStoredFoods = () => {
-  if (typeof window === "undefined") {
-    return DEFAULT_FOODS;
-  }
-
-  const storedFoods = window.localStorage.getItem(LUCKY_PICK_STORAGE_KEY);
-
-  if (!storedFoods) {
-    window.localStorage.setItem(
-      LUCKY_PICK_STORAGE_KEY,
-      JSON.stringify(DEFAULT_FOODS),
-    );
-    return DEFAULT_FOODS;
-  }
-
-  try {
-    const parsedFoods = JSON.parse(storedFoods) as LuckyPickFood[];
-    return parsedFoods.length ? parsedFoods : DEFAULT_FOODS;
-  } catch {
-    window.localStorage.setItem(
-      LUCKY_PICK_STORAGE_KEY,
-      JSON.stringify(DEFAULT_FOODS),
-    );
-    return DEFAULT_FOODS;
-  }
-};
+const LUCKY_PICK_LIMIT = 100;
+const LUCKY_PICK_POSITION_COUNT = 36;
+const ROLLING_INTERVAL = 90;
+const AUTO_STOP_DELAY = 2600;
 
 const LuckyPickPage: React.FC = () => {
-  const [foods, setFoods] = useState<LuckyPickFood[]>(DEFAULT_FOODS);
-  const [isPicking, setIsPicking] = useState<boolean>(false);
-  const [selectedFood, setSelectedFood] = useState<LuckyPickFood | null>(null);
+  const rollingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const autoStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const activeFoods = useMemo(
-    () => foods.filter((food) => food.isActive),
+  const [foods, setFoods] = useState<LuckyPickData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isPicking, setIsPicking] = useState<boolean>(false);
+  const [rollingFoodId, setRollingFoodId] = useState<number | null>(null);
+  const [selectedFood, setSelectedFood] = useState<LuckyPickData | null>(null);
+
+  const availableFoods = useMemo(
+    () => foods.filter((food) => Boolean(food.option_name)),
     [foods],
   );
 
-  useEffect(() => {
-    const syncFoods = () => {
-      setFoods(getStoredFoods());
-    };
+  const getFoodName = (food: LuckyPickData) => food.option_name ?? "Untitled";
 
-    syncFoods();
-    window.addEventListener("storage", syncFoods);
-    window.addEventListener("lucky-pick-items-updated", syncFoods);
+  const clearPickingTimers = () => {
+    if (rollingTimerRef.current) {
+      clearInterval(rollingTimerRef.current);
+      rollingTimerRef.current = null;
+    }
+
+    if (autoStopTimerRef.current) {
+      clearTimeout(autoStopTimerRef.current);
+      autoStopTimerRef.current = null;
+    }
+  };
+
+  const fetchLuckyPicks = async () => {
+    setLoading(true);
+
+    try {
+      const data = await getLuckyPicks({
+        filters: [],
+        search: "",
+        sort: { order_by: "id", sort_order: SortEnum.desc },
+        pagination: { limit: LUCKY_PICK_LIMIT, page: 1 },
+        export: false,
+      });
+
+      setFoods(data?.data ?? []);
+    } catch (error) {
+      handleApiError(error, "Error fetching lucky picks.");
+      setFoods([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLuckyPicks();
 
     return () => {
-      window.removeEventListener("storage", syncFoods);
-      window.removeEventListener("lucky-pick-items-updated", syncFoods);
+      clearPickingTimers();
     };
   }, []);
 
-  const pickFood = () => {
-    if (!activeFoods.length) {
-      message.warning("Please add an active food item first.");
+  const finishPick = () => {
+    clearPickingTimers();
+
+    if (!availableFoods.length) {
+      message.warning("No lucky pick options are available.");
       setIsPicking(false);
+      setRollingFoodId(null);
       return;
     }
 
-    const food = activeFoods[Math.floor(Math.random() * activeFoods.length)];
+    const food =
+      availableFoods[Math.floor(Math.random() * availableFoods.length)];
+
+    setRollingFoodId(food.id);
     setSelectedFood(food);
     setIsPicking(false);
-    message.success(`Lucky pick: ${food.name}`);
+    message.success(`Lucky pick: ${getFoodName(food)}`);
+  };
+
+  const startPick = () => {
+    if (!availableFoods.length) {
+      message.warning("No lucky pick options are available.");
+      return;
+    }
+
+    clearPickingTimers();
+    setSelectedFood(null);
+    setIsPicking(true);
+
+    rollingTimerRef.current = setInterval(() => {
+      const food =
+        availableFoods[Math.floor(Math.random() * availableFoods.length)];
+      setRollingFoodId(food.id);
+    }, ROLLING_INTERVAL);
+
+    autoStopTimerRef.current = setTimeout(() => {
+      finishPick();
+    }, AUTO_STOP_DELAY);
   };
 
   const handleLuckyPick = () => {
     if (isPicking) {
-      pickFood();
+      finishPick();
       return;
     }
 
-    if (!activeFoods.length) {
-      message.warning("Please add an active food item first.");
-      return;
-    }
-
-    setSelectedFood(null);
-    setIsPicking(true);
+    startPick();
   };
 
   const handlePickAgain = () => {
-    setSelectedFood(null);
-    setIsPicking(true);
+    startPick();
   };
 
   return (
@@ -144,20 +143,36 @@ const LuckyPickPage: React.FC = () => {
 
         <div className={`lucky-pick__panel ${isPicking ? "is-picking" : ""}`}>
           <div className="lucky-pick__stage">
-            {activeFoods.map((food, index) => (
+            {loading && (
+              <div className="lucky-pick__stage__loading">
+                <Spin />
+              </div>
+            )}
+
+            {!loading && !availableFoods.length && (
+              <div className="lucky-pick__stage__empty">
+                <Empty description="No lucky pick options" />
+              </div>
+            )}
+
+            {availableFoods.map((food, index) => (
               <span
                 key={food.id}
                 className={`lucky-pick__stage__item lucky-pick__stage__item--${
-                  (index % 24) + 1
-                } ${selectedFood?.id === food.id ? "is-selected" : ""}`}
+                  (index % LUCKY_PICK_POSITION_COUNT) + 1
+                } ${
+                  selectedFood?.id === food.id || rollingFoodId === food.id
+                    ? "is-selected"
+                    : ""
+                }`}
               >
-                {food.name}
+                {getFoodName(food)}
               </span>
             ))}
 
             <div className="lucky-pick__stage__center">
               <div className="lucky-pick__stage__center__question">
-                {selectedFood ? selectedFood.name : "What should I eat?"}
+                {selectedFood ? getFoodName(selectedFood) : "What should I eat?"}
               </div>
               {selectedFood && (
                 <div className="lucky-pick__stage__center__answer">
@@ -169,7 +184,9 @@ const LuckyPickPage: React.FC = () => {
             <div className="lucky-pick__stage__actions">
               <Button
                 className="lucky-pick__stage__actions__button"
+                disabled={loading || !availableFoods.length}
                 icon={isPicking ? <StopOutlined /> : <PlayCircleOutlined />}
+                loading={loading}
                 onClick={handleLuckyPick}
               >
                 {isPicking ? "Stop" : "Start"}
@@ -198,7 +215,7 @@ const LuckyPickPage: React.FC = () => {
             </div>
             <div className="lucky-pick__guide__line">
               <span className="lucky-pick__guide__line__bullet">-</span>
-              <span>Click &quot;Stop&quot; to randomly pick your meal</span>
+              <span>The animation will stop and reveal your meal</span>
             </div>
             <div className="lucky-pick__guide__line">
               <span className="lucky-pick__guide__line__bullet">-</span>
