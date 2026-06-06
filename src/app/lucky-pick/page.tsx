@@ -16,9 +16,17 @@ import { handleApiError } from "@/utils/apiHelper/errorHandler";
 import LayoutSection from "../_components/layout/LayoutSection";
 
 const LUCKY_PICK_LIMIT = 100;
-const LUCKY_PICK_POSITION_COUNT = 36;
 const ROLLING_INTERVAL = 90;
 const AUTO_STOP_DELAY = 2600;
+const LUCKY_PICK_POSITION_SEQUENCE = [
+  4, 8, 22, 36, 7, 13, 25, 31, 1, 11, 18, 35, 5, 15, 21, 28, 3, 12, 24, 34,
+  6, 17, 26, 33, 2, 10, 20, 30, 9, 16, 23, 32, 14, 19, 27, 29,
+];
+
+const getPositionClass = (index: number) =>
+  `lucky-pick__stage__item--${
+    LUCKY_PICK_POSITION_SEQUENCE[index % LUCKY_PICK_POSITION_SEQUENCE.length]
+  }`;
 
 const LuckyPickPage: React.FC = () => {
   const rollingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -141,7 +149,11 @@ const LuckyPickPage: React.FC = () => {
           </div>
         </div>
 
-        <div className={`lucky-pick__panel ${isPicking ? "is-picking" : ""}`}>
+        <div
+          className={`lucky-pick__panel ${isPicking ? "is-picking" : ""} ${
+            selectedFood ? "has-result" : ""
+          }`}
+        >
           <div className="lucky-pick__stage">
             {loading && (
               <div className="lucky-pick__stage__loading">
@@ -158,9 +170,7 @@ const LuckyPickPage: React.FC = () => {
             {availableFoods.map((food, index) => (
               <span
                 key={food.id}
-                className={`lucky-pick__stage__item lucky-pick__stage__item--${
-                  (index % LUCKY_PICK_POSITION_COUNT) + 1
-                } ${
+                className={`lucky-pick__stage__item ${getPositionClass(index)} ${
                   selectedFood?.id === food.id || rollingFoodId === food.id
                     ? "is-selected"
                     : ""
@@ -170,13 +180,26 @@ const LuckyPickPage: React.FC = () => {
               </span>
             ))}
 
-            <div className="lucky-pick__stage__center">
+            <div
+              className={`lucky-pick__stage__center ${
+                selectedFood ? "has-result" : ""
+              }`}
+            >
+              {selectedFood && (
+                <>
+                  <span className="lucky-pick__stage__center__halo" />
+                  <span className="lucky-pick__stage__center__spark lucky-pick__stage__center__spark--1" />
+                  <span className="lucky-pick__stage__center__spark lucky-pick__stage__center__spark--2" />
+                  <span className="lucky-pick__stage__center__spark lucky-pick__stage__center__spark--3" />
+                  <span className="lucky-pick__stage__center__spark lucky-pick__stage__center__spark--4" />
+                </>
+              )}
               <div className="lucky-pick__stage__center__question">
                 {selectedFood ? getFoodName(selectedFood) : "What should I eat?"}
               </div>
               {selectedFood && (
                 <div className="lucky-pick__stage__center__answer">
-                  Today&apos;s lucky meal
+                  Perfect choice!
                 </div>
               )}
             </div>
@@ -221,23 +244,6 @@ const LuckyPickPage: React.FC = () => {
               <span className="lucky-pick__guide__line__bullet">-</span>
               <span>Let fate decide your next delicious meal!</span>
             </div>
-          </div>
-        </div>
-
-        <div className="lucky-pick__footer">
-          <div className="lucky-pick__footer__brand">FoodGenie</div>
-          <div className="lucky-pick__footer__support">
-            For any inquiries or support, please feel free to contact our team.
-          </div>
-          <div className="lucky-pick__footer__text">University of Malaya</div>
-          <div className="lucky-pick__footer__text">
-            Phone: +60 3453723214
-          </div>
-          <div className="lucky-pick__footer__text">
-            Email: 25093666@siswa365.um.edu.my
-          </div>
-          <div className="lucky-pick__footer__copyright">
-            Copyright 2026 FoodGenie. All rights reserved.
           </div>
         </div>
       </div>
