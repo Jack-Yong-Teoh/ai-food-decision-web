@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button, Col, Flex, message, Row, TableProps, Tooltip, Typography } from "antd";
+import { Button, Col, Flex, message, Row, TableProps, Tooltip } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { deleteLuckyPick, getLuckyPicks } from "@/services/api/luckyPick";
@@ -148,7 +148,7 @@ const LuckyPickManagementPage = () => {
 
   return (
     <LayoutSection>
-      <div className={'page__header'}>{'Lucky Pick Management'}</div>
+      <div className={"page__header"}>{"Lucky Pick Management"}</div>
       <Flex vertical gap={"middle"}>
         <Row gutter={[10, 10]}>
           <Col xs={14} sm={16} md={12} lg={12} xl={8} xxl={6}>
@@ -172,7 +172,10 @@ const LuckyPickManagementPage = () => {
           >
             <Flex justify="end">
               <Tooltip title={"Create Lucky Pick"}>
-                <Button className="primary__button" onClick={onClickCreateLuckyPick}>
+                <Button
+                  className="primary__button"
+                  onClick={onClickCreateLuckyPick}
+                >
                   <PlusOutlined />
                   {"Create"}
                 </Button>

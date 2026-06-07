@@ -56,10 +56,12 @@
     &.has-result {
       .lucky-pick__stage {
         background:
-          radial-gradient(circle at 50% 46%,
+          radial-gradient(
+            circle at 50% 46%,
             rgba($secondary-4, 0.16) 0%,
             rgba($secondary-4, 0.05) 22%,
-            rgba($secondary, 0) 48%),
+            rgba($secondary, 0) 48%
+          ),
           linear-gradient(180deg, $secondary-2 0%, $secondary 100%);
       }
 
@@ -109,7 +111,12 @@
       inset: 0;
       z-index: 0;
       background:
-        linear-gradient(90deg, rgba($black, 0.16), rgba($black, 0) 18% 82%, rgba($black, 0.16)),
+        linear-gradient(
+          90deg,
+          rgba($black, 0.16),
+          rgba($black, 0) 18% 82%,
+          rgba($black, 0.16)
+        ),
         linear-gradient(180deg, rgba($black, 0), rgba($black, 0.16));
       content: "";
       pointer-events: none;
@@ -377,7 +384,8 @@
       transform: translate(-50%, -50%);
 
       &.has-result {
-        animation: lucky-pick-result-pop 0.52s cubic-bezier(0.2, 1.35, 0.32, 1) both;
+        animation: lucky-pick-result-pop 0.52s cubic-bezier(0.2, 1.35, 0.32, 1)
+          both;
 
         .lucky-pick__stage__center__question {
           color: $secondary-4;
@@ -573,7 +581,6 @@
       }
     }
   }
-
 }
 
 .lucky-pick-management {
@@ -704,10 +711,15 @@
     }
 
     .ant-table-tbody {
-      >tr:hover>td {
+      > tr:hover > td {
         background-color: $secondary-3 !important;
         cursor: pointer;
       }
+    }
+
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td {
+      white-space: nowrap;
     }
   }
 }
