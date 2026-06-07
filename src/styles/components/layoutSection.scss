@@ -163,7 +163,7 @@
     position: fixed !important;
     height: calc(100vh - 64px) !important;
     overflow-y: auto;
-    z-index: 3;
+    z-index: 999;
     background-color: $secondary !important;
     box-shadow: 6px 0 16px -4px rgba(0, 0, 0, 0.08);
 
@@ -263,14 +263,14 @@
 
     &__container {
       flex: 1;
-      padding: to-rem(20px) to-rem(15px);
+      padding: to-rem(20px) to-rem(20px);
       border-radius: to-rem(10px);
       width: 100%;
       max-width: to-rem(1300px);
       margin: 0 auto;
 
       @media (max-width: 430px) {
-        padding: to-rem(10px) to-rem(5px);
+        padding: to-rem(10px) to-rem(10px);
       }
     }
   }
@@ -425,8 +425,7 @@
       background-color: $secondary_2 !important;
     }
 
-    .ant-dropdown-menu-submenu-expand-icon
-      .ant-dropdown-menu-submenu-arrow-icon {
+    .ant-dropdown-menu-submenu-expand-icon .ant-dropdown-menu-submenu-arrow-icon {
       color: $text_color !important;
     }
   }
