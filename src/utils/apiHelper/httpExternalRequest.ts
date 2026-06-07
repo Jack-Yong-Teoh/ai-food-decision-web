@@ -70,7 +70,7 @@ export async function httpExternalRequest({
 
   //  3.1 Condition 1: Login endpoint will set the tokens into cookies
   if (response.ok && endpoint.includes("login")) {
-    await setAllToken(data, baseUrl);
+    setAllToken(data);
     const res = new NextResponse(bodyText, {
       status: response.status,
       statusText: response.statusText,
@@ -83,12 +83,12 @@ export async function httpExternalRequest({
   // 3.2 Condition 2: Call once refresh token when the status is 401
   if (response.status === 401 && !retry && !endpoint.includes("login")) {
     if (refresh_token) {
-      const refreshResponse = await refreshTokenRequest(httpMethod, baseUrl);
+      const refreshResponse = await refreshTokenRequest(httpMethod);
       if (!refreshResponse.ok) {
         // When the refresh_token not exist.
         const response = redirectToLogin();
         // Clear all the token cookies
-        await deleteAllToken();
+        deleteAllToken();
         return response;
       }
 
@@ -104,7 +104,7 @@ export async function httpExternalRequest({
       // When the refresh_token not exist.
       const response = redirectToLogin();
       // Clear all the token cookies
-      await deleteAllToken();
+      deleteAllToken();
       return response;
     }
   }
@@ -113,7 +113,7 @@ export async function httpExternalRequest({
   if (endpoint.includes("logout")) {
     const response = NextResponse.json({ status: 200, redirectTo: "/" });
     // Clear all the token cookies
-    await deleteAllToken();
+    deleteAllToken();
     return response;
   }
 
@@ -129,10 +129,7 @@ export async function httpExternalRequest({
 
 // This will be called when status is 401 Unauthorized,
 // because it does not require injection of access_token so no need use httpExternalRequest
-export async function refreshTokenRequest(
-  httpMethod: HttpMethod,
-  baseUrl?: string,
-) {
+export async function refreshTokenRequest(httpMethod: HttpMethod) {
   const startTime = Date.now();
   const timeout = 10000;
   const controller = new AbortController();
@@ -160,7 +157,7 @@ export async function refreshTokenRequest(
   headers.delete("content-length");
   headers.delete("Content-Length");
   headers.delete("transfer-encoding");
-  await setAllToken(data, baseUrl);
+  setAllToken(data);
   const res = new NextResponse(bodyText, {
     status: response.status,
     statusText: response.statusText,
@@ -182,33 +179,21 @@ const deleteAllToken = async () => {
   (await cookies()).delete("ACCESS_TOKEN");
   (await cookies()).delete("REFRESH_TOKEN");
 };
-const shouldUseSecureCookie = (baseUrl?: string) => {
-  if (!baseUrl) {
-    return process.env.NODE_ENV === "production";
-  }
-
-  try {
-    return new URL(baseUrl).protocol === "https:";
-  } catch {
-    return process.env.NODE_ENV === "production";
-  }
-};
 const setAllToken = async (data: {
   access_token: string;
   refresh_token: string;
-}, baseUrl?: string) => {
+}) => {
   const cookieStore = await cookies();
-  const secure = shouldUseSecureCookie(baseUrl);
 
   cookieStore.set("ACCESS_TOKEN", data.access_token, {
     httpOnly: true,
-    secure,
+    secure: true,
     sameSite: "lax",
     path: "/",
   });
   cookieStore.set("REFRESH_TOKEN", data.refresh_token, {
     httpOnly: true,
-    secure,
+    secure: true,
     sameSite: "lax",
     path: "/",
   });
