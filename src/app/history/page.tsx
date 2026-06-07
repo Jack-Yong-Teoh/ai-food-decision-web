@@ -23,7 +23,9 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 
+import { useAppSelector } from '@/redux/hook';
 import { FoodItem, getFood, getFoods, GetFoodsResponse } from "@/services/api/history";
+import { LazyloadParams, OperatorEnum, SortEnum } from '@/types/general';
 
 import LayoutSection from "../_components/layout/LayoutSection";
 
@@ -55,6 +57,9 @@ interface DetailItem {
 const PAGE_SIZE = 10;
 
 const HistoryPage: React.FC = () => {
+  const profileUserId = useAppSelector(
+    (state) => state.profile.data?.id,
+  );
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
@@ -101,8 +106,14 @@ const HistoryPage: React.FC = () => {
   const fetchHistory = async (page: number = 1) => {
     setLoading(true);
     try {
-      const params = {
-        filters: [],
+      const params: LazyloadParams = {
+        filters: [
+          {
+            field: "user_id",
+            operator: OperatorEnum.equals,
+            value: profileUserId
+          }
+        ],
         search: "",
         pagination: {
           limit: PAGE_SIZE,
@@ -110,7 +121,7 @@ const HistoryPage: React.FC = () => {
         },
         sort: {
           order_by: "id",
-          sort_order: "desc" as const,
+          sort_order: SortEnum.desc,
         },
         included_fields: [],
         excluded_fields: [],
@@ -134,9 +145,11 @@ const HistoryPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchHistory(1);
+    if (profileUserId !== undefined) {
+      fetchHistory(1);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [profileUserId]);
 
   const handlePageChange = (page: number) => {
     fetchHistory(page);
