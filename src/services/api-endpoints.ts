@@ -20,6 +20,11 @@ export const ENDPOINT = {
 
   //lucky pick
   getLuckyPicks: `/lucky-picks`,
+  getLuckyPick: `/lucky-pick?lucky_pick_id=%s`,
+  createLuckyPick: `/lucky-pick`,
+  updateLuckyPick: `/lucky-pick/%s`,
+  deleteLuckyPick: `/lucky-pick/%s`,
+
   //recommend
   recommend: `/food`,
 

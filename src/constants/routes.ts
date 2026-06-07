@@ -3,5 +3,6 @@ export const ROUTES = {
   about: "/about",
   service: "/service",
   userManagement: "/user-management",
+  luckyPickManagement: "/lucky-pick-management",
   profile: "/profile",
 };

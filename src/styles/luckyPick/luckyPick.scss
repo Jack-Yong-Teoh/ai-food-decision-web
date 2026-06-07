@@ -56,12 +56,10 @@
     &.has-result {
       .lucky-pick__stage {
         background:
-          radial-gradient(
-            circle at 50% 46%,
+          radial-gradient(circle at 50% 46%,
             rgba($secondary-4, 0.16) 0%,
             rgba($secondary-4, 0.05) 22%,
-            rgba($secondary, 0) 48%
-          ),
+            rgba($secondary, 0) 48%),
           linear-gradient(180deg, $secondary-2 0%, $secondary 100%);
       }
 
@@ -706,8 +704,9 @@
     }
 
     .ant-table-tbody {
-      > tr:hover > td {
+      >tr:hover>td {
         background-color: $secondary-3 !important;
+        cursor: pointer;
       }
     }
   }
@@ -797,5 +796,125 @@
   100% {
     opacity: 0;
     transform: translate3d(0, to-rem(-22px), 0) scale(1);
+  }
+}
+
+.create__lucky-pick-management {
+  .ant-card {
+    color: $text_color !important;
+    background-color: $secondary !important;
+  }
+
+  .ant-card-head {
+    color: $text_color !important;
+    background-color: $secondary !important;
+  }
+
+  .ant-card-body {
+    padding-top: 0 !important;
+    background-color: $secondary !important;
+  }
+
+  .ant-card-bordered {
+    border: 1px solid $secondary-3 !important;
+  }
+
+  &__card__title {
+    margin-block: 0 !important;
+    color: $text_color !important;
+  }
+
+  &__card__footer {
+    margin-top: to-rem(16px) !important;
+  }
+
+  &__form {
+    max-width: to-rem(500px);
+  }
+
+  &__divider {
+    border-block-start: 1px solid rgba($gray, 0.5) !important;
+    margin-top: 0 !important;
+  }
+}
+
+.lucky-pick-management__details {
+  .ant-card .ant-card-head {
+    color: $text_color !important;
+    background-color: $secondary !important;
+  }
+
+  .ant-descriptions-title {
+    color: $text_color !important;
+  }
+
+  .ant-descriptions-item-label {
+    color: $text_color !important;
+  }
+
+  .ant-card-bordered {
+    border: 1px solid $secondary-3 !important;
+  }
+
+  .ant-descriptions-item-content {
+    color: $text_color !important;
+  }
+
+  .ant-card-body {
+    background-color: $secondary !important;
+    border-radius: to-rem(7px) !important;
+  }
+
+  &__popconfirm__icon__danger {
+    color: $danger !important;
+  }
+
+  &__descriptions {
+    margin-bottom: to-rem(16px) !important;
+  }
+
+  &__password {
+    &__container {
+      //   border: 1px solid $muted;
+      border-radius: to-rem(10px);
+      padding: to-rem(14px) to-rem(16px);
+    }
+
+    &__save__button {
+      width: 100%;
+      margin-block: to-rem(6px) to-rem(10px);
+    }
+  }
+
+  &__safe__typo {
+    color: $safe !important;
+
+    .ant-typography {
+      color: $safe !important;
+    }
+  }
+
+  &__danger__typo {
+    color: $danger !important;
+
+    .ant-typography {
+      color: $danger !important;
+    }
+  }
+
+  &__skeleton {
+    width: 100% !important;
+    height: to-rem(500px) !important;
+  }
+
+  &__permission {
+    &__card {
+      &__title {
+        &.ant-typography {
+          font-size: to-rem(16px);
+          color: $text_color !important;
+        }
+      }
+    }
   }
 }
