@@ -75,11 +75,9 @@
       height: to-rem(220px);
       top: 12%;
       left: 8%;
-      background: radial-gradient(
-        circle,
-        rgba($primary, 0.35) 0%,
-        rgba($primary, 0) 70%
-      );
+      background: radial-gradient(circle,
+          rgba($primary, 0.35) 0%,
+          rgba($primary, 0) 70%);
     }
 
     &--two {
@@ -87,11 +85,9 @@
       height: to-rem(280px);
       bottom: 6%;
       right: 8%;
-      background: radial-gradient(
-        circle,
-        rgba($white, 0.12) 0%,
-        rgba($white, 0) 70%
-      );
+      background: radial-gradient(circle,
+          rgba($white, 0.12) 0%,
+          rgba($white, 0) 70%);
       animation-delay: -2s;
     }
   }
@@ -102,11 +98,9 @@
     width: min(100%, to-rem(560px));
     padding: to-rem(36px) to-rem(32px);
     border-radius: to-rem(24px);
-    background: linear-gradient(
-      180deg,
-      rgba($secondary, 0.96) 0%,
-      rgba($secondary_2, 0.92) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba($secondary, 0.96) 0%,
+        rgba($secondary_2, 0.92) 100%);
     border: 1px solid rgba($white, 0.08);
     box-shadow: 0 to-rem(24px) to-rem(60px) rgba($black, 0.28);
     backdrop-filter: blur(18px);
@@ -292,11 +286,9 @@
         height: to-rem(220px);
         top: 10%;
         right: 12%;
-        background: radial-gradient(
-          circle,
-          rgba($primary, 0.35) 0%,
-          rgba($primary, 0) 70%
-        );
+        background: radial-gradient(circle,
+            rgba($primary, 0.35) 0%,
+            rgba($primary, 0) 70%);
       }
 
       &--two {
@@ -304,11 +296,9 @@
         height: to-rem(260px);
         bottom: 8%;
         left: 10%;
-        background: radial-gradient(
-          circle,
-          rgba($white, 0.12) 0%,
-          rgba($white, 0) 70%
-        );
+        background: radial-gradient(circle,
+            rgba($white, 0.12) 0%,
+            rgba($white, 0) 70%);
       }
     }
 
@@ -318,11 +308,9 @@
       width: min(100%, to-rem(460px));
       padding: to-rem(32px);
       border-radius: to-rem(24px);
-      background: linear-gradient(
-        180deg,
-        rgba($secondary, 0.98) 0%,
-        rgba($secondary_2, 0.9) 100%
-      );
+      background: linear-gradient(180deg,
+          rgba($secondary, 0.98) 0%,
+          rgba($secondary_2, 0.9) 100%);
       border: 1px solid rgba($white, 0.08);
       box-shadow: 0 to-rem(30px) to-rem(70px) rgba($black, 0.32);
       backdrop-filter: blur(18px);
@@ -398,8 +386,7 @@
   border: 1px solid rgba($white, 0.06);
 
   @media (max-width: 430px) {
-    padding: to-rem(24px);
-    margin: 0 to-rem(12px);
+    padding: to-rem(10px);
     border-radius: to-rem(12px);
   }
 }
@@ -844,6 +831,7 @@
 }
 
 @keyframes recommend-float {
+
   0%,
   100% {
     transform: translate3d(0, 0, 0) scale(1);

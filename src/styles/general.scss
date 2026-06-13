@@ -45,7 +45,8 @@ body {
   padding: 0;
   height: 100%;
   font-family: "Muli", Arial, Helvetica, sans-serif;
-  background-color: $background !important;
+  background-color: $black !important;
+  background: $black !important;
 }
 
 .primary {
@@ -818,4 +819,13 @@ ul.ant-picker-ranges button {
   font-weight: 500;
   color: $text-color !important;
   margin: to-rem(10px) 0 to-rem(20px) 0;
+}
+
+// ant spin
+.ant-spin {
+  color: $primary !important;
+}
+
+.ant-spin-dot-item {
+  background-color: $primary !important;
 }

@@ -186,7 +186,7 @@ const LuckyPickDetails = () => {
                       </Descriptions.Item>
 
                       <Descriptions.Item label={"Description"} span={2}>
-                        <Form.Item name="description" rules={[validator.required]}>
+                        <Form.Item name="description">
                           <Input.TextArea autoComplete="off" rows={4} />
                         </Form.Item>
                       </Descriptions.Item>

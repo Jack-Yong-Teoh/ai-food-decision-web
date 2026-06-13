@@ -3,7 +3,7 @@
 
 .layout__section {
   min-height: 100vh !important;
-  background-color: $secondary_1 !important;
+  background-color: $black !important;
 
   &__header {
     position: fixed;
@@ -101,6 +101,8 @@
 
           &__icon {
             color: $secondary_4 !important;
+            width: to-rem(18px) !important;
+            height: to-rem(18px) !important;
           }
         }
 
@@ -263,14 +265,14 @@
 
     &__container {
       flex: 1;
-      padding: to-rem(20px) to-rem(20px);
+      padding: to-rem(20px) to-rem(20px) to-rem(40px) to-rem(20px);
       border-radius: to-rem(10px);
       width: 100%;
       max-width: to-rem(1300px);
       margin: 0 auto;
 
       @media (max-width: 430px) {
-        padding: to-rem(10px) to-rem(10px);
+        padding: to-rem(10px) to-rem(10px) to-rem(40px) to-rem(10px);
       }
     }
   }

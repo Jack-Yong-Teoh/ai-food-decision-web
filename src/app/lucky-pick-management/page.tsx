@@ -7,7 +7,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { deleteLuckyPick, getLuckyPicks } from "@/services/api/luckyPick";
 import { SortEnum } from "@/types/general";
 import { LuckyPickData, LuckyPickTableState } from "@/types/luckyPick";
-import { formatDate } from "@/utils/helper";
+import { checkNull, formatDate } from "@/utils/helper";
 
 import { SearchInput } from "../_components/input/SearchInput";
 import LayoutSection from "../_components/layout/LayoutSection";
@@ -102,6 +102,9 @@ const LuckyPickManagementPage = () => {
         dataIndex: "description",
         key: "description",
         width: "40%",
+        render: (data: string) => {
+          return checkNull(data);
+        }
       },
       {
         title: "Created Date",
