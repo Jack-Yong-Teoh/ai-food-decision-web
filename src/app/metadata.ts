@@ -1,9 +1,9 @@
 const metadata = {
-  title: "Next JS Base",
+  title: "FoodGenie",
   description:
-    "A Next.js base template with TypeScript, Tailwind CSS, Redux Toolkit, and more.",
+    "FoodGenie is a recipe recommendation app that uses AI to suggest personalized recipes based on your preferences and dietary restrictions.",
   icons: {
-    icon: "/sample.webp",
+    icon: "/food-genie-ico.ico",
   },
 };
 
