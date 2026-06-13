@@ -111,7 +111,12 @@
       inset: 0;
       z-index: 0;
       background:
-        linear-gradient(90deg, rgba($black, 0.16), rgba($black, 0) 18% 82%, rgba($black, 0.16)),
+        linear-gradient(
+          90deg,
+          rgba($black, 0.16),
+          rgba($black, 0) 18% 82%,
+          rgba($black, 0.16)
+        ),
         linear-gradient(180deg, rgba($black, 0), rgba($black, 0.16));
       content: "";
       pointer-events: none;
@@ -379,7 +384,8 @@
       transform: translate(-50%, -50%);
 
       &.has-result {
-        animation: lucky-pick-result-pop 0.52s cubic-bezier(0.2, 1.35, 0.32, 1) both;
+        animation: lucky-pick-result-pop 0.52s cubic-bezier(0.2, 1.35, 0.32, 1)
+          both;
 
         .lucky-pick__stage__center__question {
           color: $secondary-4;
@@ -575,7 +581,6 @@
       }
     }
   }
-
 }
 
 .lucky-pick-management {
@@ -708,7 +713,13 @@
     .ant-table-tbody {
       > tr:hover > td {
         background-color: $secondary-3 !important;
+        cursor: pointer;
       }
+    }
+
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td {
+      white-space: nowrap;
     }
   }
 }
@@ -797,5 +808,125 @@
   100% {
     opacity: 0;
     transform: translate3d(0, to-rem(-22px), 0) scale(1);
+  }
+}
+
+.create__lucky-pick-management {
+  .ant-card {
+    color: $text_color !important;
+    background-color: $secondary !important;
+  }
+
+  .ant-card-head {
+    color: $text_color !important;
+    background-color: $secondary !important;
+  }
+
+  .ant-card-body {
+    padding-top: 0 !important;
+    background-color: $secondary !important;
+  }
+
+  .ant-card-bordered {
+    border: 1px solid $secondary-3 !important;
+  }
+
+  &__card__title {
+    margin-block: 0 !important;
+    color: $text_color !important;
+  }
+
+  &__card__footer {
+    margin-top: to-rem(16px) !important;
+  }
+
+  &__form {
+    max-width: to-rem(500px);
+  }
+
+  &__divider {
+    border-block-start: 1px solid rgba($gray, 0.5) !important;
+    margin-top: 0 !important;
+  }
+}
+
+.lucky-pick-management__details {
+  .ant-card .ant-card-head {
+    color: $text_color !important;
+    background-color: $secondary !important;
+  }
+
+  .ant-descriptions-title {
+    color: $text_color !important;
+  }
+
+  .ant-descriptions-item-label {
+    color: $text_color !important;
+  }
+
+  .ant-card-bordered {
+    border: 1px solid $secondary-3 !important;
+  }
+
+  .ant-descriptions-item-content {
+    color: $text_color !important;
+  }
+
+  .ant-card-body {
+    background-color: $secondary !important;
+    border-radius: to-rem(7px) !important;
+  }
+
+  &__popconfirm__icon__danger {
+    color: $danger !important;
+  }
+
+  &__descriptions {
+    margin-bottom: to-rem(16px) !important;
+  }
+
+  &__password {
+    &__container {
+      //   border: 1px solid $muted;
+      border-radius: to-rem(10px);
+      padding: to-rem(14px) to-rem(16px);
+    }
+
+    &__save__button {
+      width: 100%;
+      margin-block: to-rem(6px) to-rem(10px);
+    }
+  }
+
+  &__safe__typo {
+    color: $safe !important;
+
+    .ant-typography {
+      color: $safe !important;
+    }
+  }
+
+  &__danger__typo {
+    color: $danger !important;
+
+    .ant-typography {
+      color: $danger !important;
+    }
+  }
+
+  &__skeleton {
+    width: 100% !important;
+    height: to-rem(500px) !important;
+  }
+
+  &__permission {
+    &__card {
+      &__title {
+        &.ant-typography {
+          font-size: to-rem(16px);
+          color: $text_color !important;
+        }
+      }
+    }
   }
 }

@@ -1,3 +1,5 @@
+import { LazyloadParams } from "@/types/general";
+
 import { ENDPOINT } from "../api-endpoints";
 import http from "../http";
 
@@ -73,7 +75,7 @@ export interface ValidationErrorResponse {
  * 获取食物推荐历史列表
  * POST /api/foods
  */
-export const getFoods = async (params: GetFoodsParams): Promise<GetFoodsResponse> => {
+export const getFoods = async (params: LazyloadParams): Promise<GetFoodsResponse> => {
   const res = await http.post(ENDPOINT.history, params);
   return res?.data;
 };

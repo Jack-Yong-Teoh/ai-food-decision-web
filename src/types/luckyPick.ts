@@ -19,3 +19,13 @@ export interface LuckyPickTableState extends LazyloadResponseState {
   data: LuckyPickData[];
   count: number;
 }
+
+export interface CreateLuckyPickParams {
+  option_name: string;
+  description: string;
+}
+
+export interface UpdateLuckyPickFormValues {
+  option_name: string;
+  description: string;
+}

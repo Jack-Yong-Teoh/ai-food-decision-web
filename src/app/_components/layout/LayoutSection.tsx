@@ -12,7 +12,6 @@ import {
   BulbOutlined,
   CoffeeOutlined,
   CreditCardOutlined,
-  DollarOutlined,
   HistoryOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -227,9 +226,8 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
           type="text"
           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           onClick={toggleCollapse}
-          className={`layout__section__header__button ${
-            collapsed ? "collapsed" : ""
-          }`}
+          className={`layout__section__header__button ${collapsed ? "collapsed" : ""
+            }`}
         />
 
         <div className={`layout__section__header__middle__container`}>
@@ -247,7 +245,9 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
               <>
                 <Button
                   icon={
-                    <DollarOutlined
+                    <Image
+                      src={IMAGES.coin_icon}
+                      preview={false}
                       className={`layout__section__header__middle__container__button__container__wallet__button__icon`}
                     />
                   }
@@ -309,9 +309,8 @@ const LayoutSection: React.FC<LayoutSectionProps> = ({
         </Sider>
 
         <Layout
-          className={`layout__section__content ${collapsed && "collapsed"} ${
-            noPadding ? "no__padding" : ""
-          }`}
+          className={`layout__section__content ${collapsed && "collapsed"} ${noPadding ? "no__padding" : ""
+            }`}
         >
           {isPending ? (
             <div className={`layout__section__content__container `}>

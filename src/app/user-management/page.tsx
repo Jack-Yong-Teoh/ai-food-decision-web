@@ -174,6 +174,7 @@ const UserManagementPage = () => {
 
   return (
     <LayoutSection>
+      <div className={"page__header"}>{"User Management"}</div>
       <Flex vertical gap={"middle"}>
         <Row gutter={[10, 10]}>
           <Col xs={14} sm={16} md={12} lg={12} xl={8} xxl={6}>

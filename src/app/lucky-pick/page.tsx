@@ -24,8 +24,7 @@ const LUCKY_PICK_POSITION_SEQUENCE = [
 ];
 
 const getPositionClass = (index: number) =>
-  `lucky-pick__stage__item--${
-    LUCKY_PICK_POSITION_SEQUENCE[index % LUCKY_PICK_POSITION_SEQUENCE.length]
+  `lucky-pick__stage__item--${LUCKY_PICK_POSITION_SEQUENCE[index % LUCKY_PICK_POSITION_SEQUENCE.length]
   }`;
 
 const LuckyPickPage: React.FC = () => {
@@ -102,7 +101,6 @@ const LuckyPickPage: React.FC = () => {
     setRollingFoodId(food.id);
     setSelectedFood(food);
     setIsPicking(false);
-    message.success(`Lucky pick: ${getFoodName(food)}`);
   };
 
   const startPick = () => {
@@ -140,7 +138,7 @@ const LuckyPickPage: React.FC = () => {
   };
 
   return (
-    <LayoutSection showFooter={false}>
+    <LayoutSection>
       <div className="lucky-pick">
         <div className="lucky-pick__header">
           <div className="lucky-pick__header__title">Lucky Pick</div>
@@ -150,9 +148,8 @@ const LuckyPickPage: React.FC = () => {
         </div>
 
         <div
-          className={`lucky-pick__panel ${isPicking ? "is-picking" : ""} ${
-            selectedFood ? "has-result" : ""
-          }`}
+          className={`lucky-pick__panel ${isPicking ? "is-picking" : ""} ${selectedFood ? "has-result" : ""
+            }`}
         >
           <div className="lucky-pick__stage">
             {loading && (
@@ -170,20 +167,18 @@ const LuckyPickPage: React.FC = () => {
             {availableFoods.map((food, index) => (
               <span
                 key={food.id}
-                className={`lucky-pick__stage__item ${getPositionClass(index)} ${
-                  selectedFood?.id === food.id || rollingFoodId === food.id
-                    ? "is-selected"
-                    : ""
-                }`}
+                className={`lucky-pick__stage__item ${getPositionClass(index)} ${selectedFood?.id === food.id || rollingFoodId === food.id
+                  ? "is-selected"
+                  : ""
+                  }`}
               >
                 {getFoodName(food)}
               </span>
             ))}
 
             <div
-              className={`lucky-pick__stage__center ${
-                selectedFood ? "has-result" : ""
-              }`}
+              className={`lucky-pick__stage__center ${selectedFood ? "has-result" : ""
+                }`}
             >
               {selectedFood && (
                 <>

@@ -40,6 +40,343 @@
   }
 }
 
+.recommend-loading,
+.recommend-guest {
+  position: relative;
+  min-height: calc(100vh - to-rem(180px));
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: to-rem(28px);
+  align-items: center;
+  padding: to-rem(28px) 0 to-rem(44px);
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+}
+
+.recommend-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+
+  &__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(to-rem(12px));
+    opacity: 0.55;
+    animation: recommend-float 8s ease-in-out infinite;
+
+    &--one {
+      width: to-rem(220px);
+      height: to-rem(220px);
+      top: 12%;
+      left: 8%;
+      background: radial-gradient(circle,
+          rgba($primary, 0.35) 0%,
+          rgba($primary, 0) 70%);
+    }
+
+    &--two {
+      width: to-rem(280px);
+      height: to-rem(280px);
+      bottom: 6%;
+      right: 8%;
+      background: radial-gradient(circle,
+          rgba($white, 0.12) 0%,
+          rgba($white, 0) 70%);
+      animation-delay: -2s;
+    }
+  }
+
+  &__card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, to-rem(560px));
+    padding: to-rem(36px) to-rem(32px);
+    border-radius: to-rem(24px);
+    background: linear-gradient(180deg,
+        rgba($secondary, 0.96) 0%,
+        rgba($secondary_2, 0.92) 100%);
+    border: 1px solid rgba($white, 0.08);
+    box-shadow: 0 to-rem(24px) to-rem(60px) rgba($black, 0.28);
+    backdrop-filter: blur(18px);
+    text-align: center;
+    margin: 0 auto;
+
+    @media (max-width: 430px) {
+      padding: to-rem(28px) to-rem(22px);
+    }
+  }
+
+  &__title {
+    margin-top: to-rem(22px);
+    font-size: to-rem(20px);
+    font-weight: 500;
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+    color: $white;
+  }
+
+  &__subtitle {
+    margin-top: to-rem(10px);
+    font-size: to-rem(14px);
+    line-height: 1.6;
+    color: rgba($white, 0.62);
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+  }
+}
+
+.recommend-guest {
+  overflow: hidden;
+
+  &__content,
+  &__panel {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: to-rem(24px);
+  }
+
+  &__copy {
+    max-width: to-rem(720px);
+  }
+
+  &__badge {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: to-rem(8px);
+    padding: to-rem(8px) to-rem(14px);
+    border-radius: to-rem(999px);
+    border: 1px solid rgba($primary, 0.26);
+    background: rgba($primary, 0.08);
+    color: $primary;
+    font-size: to-rem(13px);
+    font-weight: 500;
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: clamp(to-rem(34px), 4vw, to-rem(54px));
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: $white;
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    max-width: to-rem(760px);
+  }
+
+  &__subtitle {
+    margin: 0;
+    max-width: to-rem(640px);
+    font-size: to-rem(16px);
+    line-height: 1.75;
+    color: rgba($white, 0.68);
+    font-family: "Muli", Arial, Helvetica, sans-serif;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: to-rem(12px);
+    margin-top: to-rem(8px);
+
+    &__primary,
+    &__secondary {
+      height: to-rem(48px);
+      border-radius: to-rem(12px);
+      font-family: "Muli", Arial, Helvetica, sans-serif;
+      font-weight: 500;
+      padding: 0 to-rem(18px);
+    }
+
+    &__primary {
+      background: $primary !important;
+      border-color: $primary !important;
+      color: $white !important;
+      box-shadow: 0 to-rem(10px) to-rem(28px) rgba($primary, 0.18);
+
+      &:hover {
+        background: color.adjust($primary, $lightness: -4%) !important;
+        border-color: color.adjust($primary, $lightness: -4%) !important;
+        color: $white !important;
+      }
+    }
+
+    &__secondary {
+      background: rgba($white, 0.04) !important;
+      border: 1px solid rgba($white, 0.12) !important;
+      color: rgba($white, 0.88) !important;
+
+      &:hover {
+        background: rgba($white, 0.07) !important;
+        border-color: rgba($white, 0.18) !important;
+        color: $white !important;
+      }
+    }
+  }
+
+  &__benefits {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: to-rem(14px);
+
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__benefit-card {
+    padding: to-rem(20px);
+    border-radius: to-rem(18px);
+    background: rgba($white, 0.04);
+    border: 1px solid rgba($white, 0.06);
+    backdrop-filter: blur(12px);
+
+    &__icon {
+      width: to-rem(38px);
+      height: to-rem(38px);
+      display: grid;
+      place-items: center;
+      border-radius: to-rem(12px);
+      background: rgba($primary, 0.12);
+      color: $primary;
+      margin-bottom: to-rem(14px);
+      font-size: to-rem(18px);
+    }
+
+    &__title {
+      font-size: to-rem(16px);
+      font-weight: 500;
+      color: $white;
+      font-family: "Muli", Arial, Helvetica, sans-serif;
+      margin-bottom: to-rem(8px);
+    }
+
+    &__description {
+      font-size: to-rem(13px);
+      line-height: 1.6;
+      color: rgba($white, 0.58);
+      font-family: "Muli", Arial, Helvetica, sans-serif;
+    }
+  }
+
+  &__panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: to-rem(520px);
+
+    &__glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(to-rem(18px));
+      opacity: 0.7;
+
+      &--one {
+        width: to-rem(220px);
+        height: to-rem(220px);
+        top: 10%;
+        right: 12%;
+        background: radial-gradient(circle,
+            rgba($primary, 0.35) 0%,
+            rgba($primary, 0) 70%);
+      }
+
+      &--two {
+        width: to-rem(260px);
+        height: to-rem(260px);
+        bottom: 8%;
+        left: 10%;
+        background: radial-gradient(circle,
+            rgba($white, 0.12) 0%,
+            rgba($white, 0) 70%);
+      }
+    }
+
+    &__card {
+      position: relative;
+      z-index: 1;
+      width: min(100%, to-rem(460px));
+      padding: to-rem(32px);
+      border-radius: to-rem(24px);
+      background: linear-gradient(180deg,
+          rgba($secondary, 0.98) 0%,
+          rgba($secondary_2, 0.9) 100%);
+      border: 1px solid rgba($white, 0.08);
+      box-shadow: 0 to-rem(30px) to-rem(70px) rgba($black, 0.32);
+      backdrop-filter: blur(18px);
+
+      &__eyebrow {
+        display: inline-flex;
+        padding: to-rem(6px) to-rem(12px);
+        border-radius: to-rem(999px);
+        background: rgba($white, 0.06);
+        color: rgba($white, 0.72);
+        font-size: to-rem(12px);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-family: "Muli", Arial, Helvetica, sans-serif;
+      }
+
+      &__title {
+        margin-top: to-rem(16px);
+        font-size: to-rem(28px);
+        line-height: 1.12;
+        font-weight: 600;
+        color: $white;
+        font-family: "Muli", Arial, Helvetica, sans-serif;
+      }
+
+      &__description {
+        margin-top: to-rem(12px);
+        font-size: to-rem(14px);
+        line-height: 1.7;
+        color: rgba($white, 0.62);
+        font-family: "Muli", Arial, Helvetica, sans-serif;
+      }
+    }
+
+    &__metrics {
+      display: grid;
+      gap: to-rem(12px);
+      margin-top: to-rem(24px);
+    }
+
+    &__metric {
+      display: flex;
+      align-items: center;
+      gap: to-rem(14px);
+      padding: to-rem(14px) to-rem(16px);
+      border-radius: to-rem(16px);
+      background: rgba($white, 0.04);
+      border: 1px solid rgba($white, 0.06);
+
+      &__value {
+        font-size: to-rem(18px);
+        font-weight: 600;
+        color: $primary;
+        font-family: "Muli", Arial, Helvetica, sans-serif;
+        min-width: to-rem(28px);
+      }
+
+      &__label {
+        font-size: to-rem(14px);
+        color: rgba($white, 0.78);
+        font-family: "Muli", Arial, Helvetica, sans-serif;
+      }
+    }
+  }
+}
+
 .recommend-form-card {
   max-width: to-rem(720px);
   margin: 0 auto;
@@ -49,8 +386,7 @@
   border: 1px solid rgba($white, 0.06);
 
   @media (max-width: 430px) {
-    padding: to-rem(24px);
-    margin: 0 to-rem(12px);
+    padding: to-rem(10px);
     border-radius: to-rem(12px);
   }
 }
@@ -491,5 +827,17 @@
 
   @media (max-width: 430px) {
     margin: to-rem(12px) 0;
+  }
+}
+
+@keyframes recommend-float {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(0, to-rem(-14px), 0) scale(1.04);
   }
 }
